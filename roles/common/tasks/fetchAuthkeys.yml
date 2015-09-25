@@ -1,0 +1,8 @@
+---
+# Execute on all nodes
+- include: groups.yml
+- name:  For each user, Fetch RSA pub keys from remote hosts 
+  fetch: src=/home/"{{ item['name'] }}"/.ssh/id_rsa.pub dest={{ keys_dir }}/{{ item['name'] }}//{{ inventory_hostname }}_temp_key.txt flat=yes
+  with_items: ssh_users
+  tags:
+    - allSSH

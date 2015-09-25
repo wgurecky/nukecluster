@@ -1,0 +1,9 @@
+---
+- name: restart pbs_mom
+  action: service name=pbs_mom state=restarted
+
+- name: restart pbs_server
+  action: service name=pbs_server state=restarted
+
+- name: restart maui
+  action: service name=maui state=restarted

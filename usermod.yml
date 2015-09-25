@@ -1,0 +1,6 @@
+---
+# To only update user groups use the tag option --tags "usermod"
+# When adding new users or deleting users do not use a tag
+- hosts: all
+  roles: 
+    - common

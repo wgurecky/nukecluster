@@ -1,0 +1,3 @@
+---
+- include: known_hosts.yml
+- include: openssh_config.yml

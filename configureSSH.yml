@@ -1,0 +1,5 @@
+---
+- name: Configure openSSH 
+  hosts: all
+  roles:
+    - role: sshd

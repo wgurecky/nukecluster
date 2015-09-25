@@ -1,0 +1,6 @@
+---
+# Ensure that hosts and known hosts file on every node
+# in cluster contains the master hosts list.  The master
+# hosts list is provided in the files folder in this role.
+- name: Ensure /etc/hosts file is up to date on every node
+  template: src=hosts.j2 dest=/etc/hosts

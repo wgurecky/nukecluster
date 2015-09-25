@@ -1,0 +1,45 @@
+---
+# Execute on head node only
+- name:  For each user, Copy contents of base install temp_auth keys files to auth_keys_file
+  shell: cat {{ keys_dir }}/{{ item['name'] }}//192.168.1.101_temp_key.txt >> "{{ keys_dir }}"/"{{ item['name'] }}"_temp_auth_keys.txt
+  with_items: ssh_users
+  ignore_errors: yes
+  tags:
+    - headSSH
+
+- name:  For each user, Copy contents of chroot tmp_auth keys to auth_keys_file
+  shell: cat {{ keys_dir }}/{{ item['name'] }}/srv/nukeroot_temp_key.txt >> "{{ keys_dir }}"/"{{ item['name'] }}"_temp_auth_keys.txt
+  with_items: ssh_users
+  ignore_errors: yes
+  tags:
+    - headSSH
+
+- name: Change ownership of auth_keys files
+  shell: chown "{{ item['name'] }}":"{{ item['name'] }}" "{{ keys_dir }}"/"{{ item['name'] }}"_temp_auth_keys.txt
+  with_items: ssh_users
+  tags:
+    - headSSH
+
+- name: Change permissions of auth_keys file
+  shell: chmod 640 "{{ keys_dir }}"/"{{ item['name'] }}"_temp_auth_keys.txt
+  with_items: ssh_users
+  tags:
+    - headSSH
+
+- name: Distribute global auth_keys files to all nodes
+  copy: src={{ keys_dir }}/{{ item['name'] }}_temp_auth_keys.txt dest=/home/{{ item['name'] }}/.ssh/authorized_keys
+  with_items: ssh_users
+  tags:
+    - headSSH
+
+- name: Remove all temporary key files
+  shell: rm -r "{{ keys_dir }}"/*
+  tags:
+    - headSSH
+
+- name: If present, append foreign_keys files to auth_keys file on head node
+  shell: cat /home/"{{ item.name }}"/.ssh/foreign_keys >> /home/"{{ item.name }}"/.ssh/authorized_keys
+  with_items: ssh_users
+  ignore_errors: yes
+  tags:
+    - headSSH

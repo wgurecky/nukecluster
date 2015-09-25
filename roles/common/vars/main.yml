@@ -1,0 +1,53 @@
+---
+# List of users and groups
+# This file must be kept up to date. 
+# Used for managing users/groups on
+# the cluster rather than use useradd/usermod commands.
+# In addition ssh keys are handled by this role.
+#
+# Ensure to give each user a unique uid from 1000-1999
+# Every entry in ssh_users requires:
+#  - name
+#  - group list (comma seperated no spaces)
+#  - shell
+#  - uid
+# Obey YAML syntax!  this file is syntax sensitive!  spaces matter.
+#
+ssh_users:
+  - name: wlg333
+    groups: users,mcnpx,vera-admin,mcnp6,njoy,serpent,origin,sudo
+    shell: /bin/bash
+    uid: 1010
+
+  - name: armstru
+    groups: users,mcnpx
+    shell: /bin/bash
+    uid: 1011
+
+  - name: dbz473
+    groups: users
+    shell: /bin/bash
+    uid: 1012
+
+  - name: rf8465
+    groups: users,mcnpx,mcnp6,origin,njoy,serpent,sudo
+    shell: /bin/bash
+    uid: 1013
+
+  - name: admin
+    groups: mcnpx,mcnp6,origin,njoy,serpent,sudo
+    shell: /bin/bash
+    uid: 1014
+
+# List of groups.  Add or remove groups from the cluster here.
+cluster_groups: 
+  - users
+  - sudo
+  - mcnpx
+  - mcnp6
+  - njoy
+  - serpent
+  - origin
+  - vera-admin
+
+keys_dir:  /root/nukecluster/roles/common/files

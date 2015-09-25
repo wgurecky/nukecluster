@@ -1,0 +1,8 @@
+---
+# Include vars/main.yml
+# Run tasks
+- include_vars: main.yml
+- include: groups.yml
+- include: updateUsers.yml
+- include: fetchAuthkeys.yml
+- include: distributeAuthKeys.yml

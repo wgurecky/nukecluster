@@ -1,0 +1,177 @@
+
+# Create queues and set their attributes.
+#
+#
+create queue default
+set queue default queue_type = Route
+set queue default max_running = 12
+set queue default route_destinations = quick
+set queue default route_destinations += day
+set queue default route_destinations += week
+set queue default route_destinations += month
+set queue default route_destinations += extended
+set queue default route_destinations += james
+set queue default enabled = True
+set queue default started = True
+##set queue default route_destinations += debug
+#
+# Create and define queue quick
+#
+create queue quick
+set queue quick queue_type = Execution
+set queue quick Priority = 2
+set queue quick max_running = 100
+set queue quick max_queuable = 100
+set queue quick resources_min.nodect = 1
+set queue quick resources_max.nodect = 64
+set queue quick resources_available.nodect = 150
+set queue quick max_user_run = 24
+set queue quick max_user_queuable = 100
+set queue quick resources_min.walltime = 00:00:01
+set queue quick resources_max.walltime = 2:00:00
+set queue quick enabled = True
+set queue quick started = True
+#
+# Create and define queue day
+#
+create queue day
+set queue day queue_type = Execution
+set queue day Priority = 2
+set queue day max_running = 100
+set queue day max_queuable = 100
+set queue day resources_min.nodect = 1
+set queue day resources_max.nodect = 32
+set queue day resources_available.nodect = 150
+set queue day max_user_run = 18
+set queue day max_user_queuable = 75
+set queue day resources_min.walltime = 00:00:01
+set queue day resources_max.walltime = 24:00:00
+set queue day enabled = True
+set queue day started = True
+#
+# Create and define queue week
+#
+create queue week
+set queue week queue_type = Execution
+set queue week Priority = 3
+set queue week max_running = 100
+set queue week max_queuable = 100
+set queue week resources_min.nodect = 1
+set queue week resources_max.nodect = 20
+set queue week resources_available.nodect = 150
+set queue week max_user_run = 8
+set queue week max_user_queuable = 12
+set queue week resources_min.walltime = 00:00:01
+set queue week resources_max.walltime = 168:00:00
+set queue week enabled = True
+set queue week started = True
+#
+# Create and define queue month
+#
+create queue month
+set queue month queue_type = Execution
+set queue month Priority = 4
+set queue month max_running = 100
+set queue month max_queuable = 100
+set queue month resources_min.nodect = 1
+set queue month resources_max.nodect = 12
+set queue month resources_available.nodect = 150
+set queue month max_user_run = 1
+set queue month max_user_queuable = 2
+set queue month resources_min.walltime = 00:00:01
+set queue month resources_max.walltime = 720:00:00
+set queue month enabled = True
+set queue month started = True
+#
+# Create and define queue extended
+#
+create queue extended
+set queue extended queue_type = Execution
+set queue extended Priority = 5
+set queue extended max_running = 100
+set queue extended max_queuable = 100
+set queue extended resources_min.nodect = 1
+set queue extended resources_max.nodect = 8
+set queue extended resources_available.nodect = 150
+set queue extended max_user_run = 1
+set queue extended max_user_queuable = 1
+set queue extended resources_min.walltime = 00:00:01
+set queue extended resources_max.walltime = 4320:00:00
+set queue extended enabled = True
+set queue extended started = True
+#
+# Create and define queue james
+#
+create queue james
+set queue james queue_type = Execution
+set queue james Priority = 1
+set queue james acl_users = armstrhu
+set queue james acl_users += forcephoenix
+set queue james acl_user_enable = True
+set queue james max_running = 1000
+set queue james max_queuable = 1000000
+set queue james resources_min.nodect = 1
+set queue james resources_max.nodect = 150
+set queue james resources_available.nodect = 150
+set queue james max_user_run = 1050
+set queue james max_user_queuable = 1000000
+set queue james resources_max.walltime = 3600:00:00
+set queue james enabled = True
+set queue james started = True
+#
+# Define queue will
+#
+create queue will
+set queue will queue_type = Execution
+set queue will Priority = 1
+set queue will acl_users = wlg333
+set queue will acl_users += forcephoenix
+set queue will acl_user_enable = True
+set queue will max_running = 1000
+set queue will max_queuable = 1000000
+set queue will resources_min.nodect = 1
+set queue will resources_max.nodect = 210
+set queue will resources_available.nodect = 210
+set queue will max_user_run = 1050
+set queue will max_user_queuable = 1000000
+set queue will resources_max.walltime = 3600:00:00
+set queue will enabled = True
+set queue will started = True
+#
+# Define queue god
+#
+create queue will
+set queue will queue_type = Execution
+set queue will Priority = 1
+set queue will acl_users = wlg333,rf8465
+set queue will acl_users += forcephoenix
+set queue will acl_user_enable = True
+set queue will max_running = 1000
+set queue will max_queuable = 1000000
+set queue will resources_min.nodect = 1
+set queue will resources_max.nodect = 210
+set queue will resources_available.nodect = 210
+set queue will max_user_run = 1050
+set queue will max_user_queuable = 1000000
+set queue will resources_max.walltime = 3600:00:00
+set queue will enabled = True
+set queue will started = True
+#
+# Set server attributes.
+#
+set server scheduling = True
+set server max_user_run = 210
+set server default_queue = default
+set server log_events = 63
+# set server mail_from = adm
+set server query_other_jobs = True
+# set server resources_default.cput = 01:00:00
+set server resources_default.neednodes = 1
+set server resources_default.nodect = 1
+set server resources_available.nodect = 210
+set server resources_default.nodes = 1
+set server scheduler_iteration = 60
+set server node_ping_rate = 100
+set server node_check_rate = 100
+set server tcp_timeout = 6
+set server default_node = 100

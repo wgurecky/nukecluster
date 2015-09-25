@@ -1,0 +1,17 @@
+---
+# Run this playbook anytime users or groups are modified
+- name: Update users list
+  user:  name={{ item.name }}
+         shell={{ item.shell }} 
+         generate_ssh_key=yes 
+         groups={{ item.groups }}
+         uid={{ item.uid }}
+  with_items: ssh_users
+  tags:
+    - usermod
+
+- name: Update authorized_keys files on all nodes
+  authorized_key: user={{ item.name }} key="{{ lookup('file', '/home/' + item.name + '/.ssh/id_rsa.pub' ) }}"
+  with_items: ssh_users
+  tags:
+    - usermod

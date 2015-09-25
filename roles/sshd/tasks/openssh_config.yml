@@ -1,0 +1,14 @@
+---
+- name: Allow all 192.168.1.xxx in /etc/hosts.allow file
+  template: src=hosts_allow.j2  dest=/etc/hosts.allow
+
+- name: Deny everything else in /etc/hosts.deny file
+  template: src=hosts_deny.j2  dest=/etc/hosts.deny
+
+- name: Configure sshd
+  template:  src=sshd_config.j2  dest=/etc/ssh/sshd_config
+  notify:
+    - restart ssh
+
+- name: Configure ssh
+  template: src=ssh_config.j2 dest=/etc/ssh/ssh_config

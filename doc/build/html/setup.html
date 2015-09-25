@@ -1,0 +1,326 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Setup and Install &mdash; Nukestar 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Nukestar 0.1 documentation" href="index.html" />
+    <link rel="next" title="Configuring The Firewall/Router" href="firewall.html" />
+    <link rel="prev" title="Introduction" href="intro.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="firewall.html" title="Configuring The Firewall/Router"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="intro.html" title="Introduction"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Nukestar 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="setup-and-install">
+<h1>Setup and Install<a class="headerlink" href="#setup-and-install" title="Permalink to this headline">¶</a></h1>
+<p>The pourpose of each machine in the cluster is provided below:</p>
+<div class="section" id="firewall-router">
+<h2>Firewall/Router<a class="headerlink" href="#firewall-router" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>Purpose:</dt>
+<dd><ul class="first last simple">
+<li>Runs DHCP server, assigns IP adresses to all nodes in the cluster</li>
+<li>Routes incomming SSH traffic to port 22 on the head node (NAT)</li>
+<li>Limits the attack surface of the cluster to just ONE open port</li>
+<li>Obscures the presence of the cluster on the net (inhibit portscans)</li>
+<li>Logs traffic information</li>
+</ul>
+</dd>
+<dt>Firewall hardware requirements:</dt>
+<dd><ul class="first last simple">
+<li>2 port 1 Gbit/sec NIC (intel prefered)</li>
+<li>Modest CPU  (2 core 2GHZ+)</li>
+<li>Atleast 1 GB RAM</li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="head-node">
+<h2>Head Node<a class="headerlink" href="#head-node" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>Role:</dt>
+<dd><ul class="first last simple">
+<li>Runs PBS-server and maui to distribute jobs to compute nodes</li>
+<li>Raid-10 for fault tolorance operation. (&gt;=4 2TB HDDs)</li>
+<li>Runs NFS share</li>
+<li>Contains a chroot upon which the compute node images are built</li>
+<li>Runs PXE-server to distribute OS images to compute nodes on compute node bootup</li>
+<li>Is the single point of entry to the cluster via ssh</li>
+</ul>
+</dd>
+<dt>Head node hardware requirements:</dt>
+<dd><ul class="first last simple">
+<li>Large RAM pool (&gt;=16 GB)</li>
+<li>Fast CPU (8 core + Intel recommended)</li>
+</ul>
+</dd>
+</dl>
+<p>The head node should have a VGA port so that a monitor can be connected to it.
+This will ease some administrative tasks.</p>
+</div>
+<div class="section" id="storage-nodes-optional">
+<h2>Storage Nodes (OPTIONAL)<a class="headerlink" href="#storage-nodes-optional" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>Role:</dt>
+<dd><ul class="first last simple">
+<li>Contains storage pool(s) used as a glusterFS brick(s)</li>
+<li>Runs GlusterFS-server</li>
+<li>Runs NFS-server</li>
+<li>Provides location to back up the Head Node&#8217;s FS.</li>
+</ul>
+</dd>
+<dt>Storage node hardware:</dt>
+<dd><ul class="first last simple">
+<li>Atleast 5 hard disks.  1 for OS, 4 for glusterfs/raid</li>
+<li>Large RAM pool (&gt;=16 GB)</li>
+<li>Disks used for mass storage should be SAS 1TB+ 7200, or 10000 RPM drives</li>
+<li>multi-core (4+ cores)</li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="compute-nodes">
+<h2>Compute Nodes<a class="headerlink" href="#compute-nodes" title="Permalink to this headline">¶</a></h2>
+<p>All large MPI tasks will be run on the compute nodes.  The PBS+maui queuing
+system ensures fair utilization of the cluster&#8217;s resources.</p>
+<dl class="docutils">
+<dt>Role:</dt>
+<dd><ul class="first last simple">
+<li>provides computational power</li>
+<li>runs pbs_mom</li>
+</ul>
+</dd>
+<dt>Hardware:</dt>
+<dd><ul class="first last simple">
+<li>many core</li>
+<li>&gt;= 1Gbit ethernet NiCs</li>
+<li>atleast 2GB RAM/core</li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="other">
+<h2>Other<a class="headerlink" href="#other" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>Network Switches:</dt>
+<dd><ul class="first last simple">
+<li>at the time of this writting, dont know if ethernet or infiniband</li>
+<li>provides interconnectivity between all nodes in cluster</li>
+<li>Should be atleast 1Gbit/sec</li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="aprox-maximum-hardware-cost">
+<h2>Aprox Maximum Hardware Cost<a class="headerlink" href="#aprox-maximum-hardware-cost" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>Not including any of the bare bones computers (we got all the compute nodes for free?):</dt>
+<dd><ul class="first last simple">
+<li>$200/1TB SAS disk  x 16 = $ 3200  for hard drives</li>
+<li>$100 for ethernet cables</li>
+<li>$2400 per 24 port infiniband switch x 2 = $4800  (optional)</li>
+<li>$1000 for 48 infiniband cables (optional)</li>
+<li>$600 per DELL infiniband PCI card x 5 = $3000 (optional)</li>
+</ul>
+</dd>
+</dl>
+<p>Approx $14200 can be spent for an optimal setup, not including cost of computational power.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The old Nukestar nodes are suitable for use as compute / storage nodes in the new cluster...
+However, the old nodes lack an Infiniband interface.  It is very expensive to upgrade the old
+machines to be infiniband compatible.</p>
+</div>
+</div>
+<div class="section" id="operating-system">
+<h2>Operating System<a class="headerlink" href="#operating-system" title="Permalink to this headline">¶</a></h2>
+<p>The operating system of choice for the cluster was chosen to be
+Debian Jessie.  The authors are familiar with Debian based machines from
+past experience.</p>
+<div class="section" id="os-install">
+<h3>OS Install<a class="headerlink" href="#os-install" title="Permalink to this headline">¶</a></h3>
+<p>The first task is to install the necissary operating systems on the firewall,
+head node (and optionally the storage nodes).  PfSense should be installed on the Firewall.</p>
+<p>Debian is installed on the Head node. Visit their respective websites to download bootable install isos or if
+you run into issues installing either.</p>
+<p>When installing Debian on the head node,
+take care to configure the raid 10 correctly, utilizing all drives in a single mdraid storage pool.
+A recommended raid 10 + LVM setup is shown below.  Logical Volume Management (LVM) is useful
+when creating backup snapshots or resizing partitions online.:</p>
+<div class="highlight-python"><div class="highlight"><pre>-------------------------------------------------------------
+|                       RAID 10 Array                       |
+| Disk 1 (sda) | Disk 2 (sdb) | Disk 3 (sdc) | Disk 4 (sdd) | &lt;- config each divice as RAID device
+-------------------------------------------------------------
+|                           LVM                             | &lt;- Use entire raid10 in LVM pool
+-------------------------------------------------------------
+| LVM locigal vol &quot;home&quot;            | LVM logical vol &quot;root&quot;| &lt;- LVM logical volumes
+-------------------------------------------------------------
+|          /home   (~1.5Tb)         |           / (~0.5Tb)  | &lt;- fs mounts
+-------------------------------------------------------------
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Ensure to mark _atleast_ one disk with a &#8220;bootable&#8221; flag durring the partitioning step.
+As of the time of this writing (fall 2015) grub can boot from the /boot directory located
+inside a raid 10 array.  No need to make a seperate /boot partition.</p>
+</div>
+<p>The Debian installations will ask
+for a new user to be setup  (in addition to the root account).  This user should be the default
+system administration account.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The administrators account is NOT the root account.  We will dissallow root login from the
+outside world to the cluster in future steps.  When first logging in as an admin
+you must switch users to the root account to make modifications
+to the base system.  Installing sudo and adding admin users to the sudo group aliviates some
+minor annoyances of having to type &#8220;su&#8221; all the time.</p>
+</div>
+<p>Durring the install procedure, there will be an option to install some software packages.  They are
+all optional, however, it is recommended to install the ssh package and disable any &#8220;printer&#8221; packages.
+It is not neccisary to install a graphical desktop environment - it will only consume hard drive space but has no
+other consequences.</p>
+<p>From here on, every command that is
+executed as root will have a <code class="docutils literal"><span class="pre">#</span></code> symbol preceeding it.  Every command that is executed
+by a limited privilage account will be preceeded by a <code class="docutils literal"><span class="pre">$</span></code>.</p>
+<p>If no graphical desktop environment package was selected durring the initial instal, you can choose to install a minimal
+gui desktop environment after you boot the new head node OS for the first time.
+X11, a basic web browser such as Madori and a simple destop environment should be installed on the head node.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># apt-get update</span>
+<span class="c"># apt-get install Xorg madori dwm</span>
+</pre></div>
+</div>
+<p>If dwm is installed, the contensts of <code class="docutils literal"><span class="pre">$~/.xinitrc</span></code> should contain.</p>
+<div class="highlight-python"><div class="highlight"><pre>exec dwm &amp;
+</pre></div>
+</div>
+<p>The graphical environment is lauched by</p>
+<div class="highlight-python"><div class="highlight"><pre>$startx
+</pre></div>
+</div>
+<p>This will allow easy graphical configuration of the Firewall in the following steps. Avoid running X11 as root. The
+user should learn the basic commands of dwm before use.  Dwm is a minimal desktop window manager.  Read Dwm&#8217;s documentation
+for details on how to resize windows, open a terminal (super + enter), or launch applications (super + p or super + space by default).</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">It is not known at this time if infiniband will be useded for interconnects or not.  It may be very expensive
+to buy the networking equipment to do so.  IF you are so lucky to have infiniband interconnects you should install
+IPoIB (IP over Infiniband) on the head node and storage nodes.  This will allow the infiniband LAN to
+be managed just like an ethernet network.</p>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Setup and Install</a><ul>
+<li><a class="reference internal" href="#firewall-router">Firewall/Router</a></li>
+<li><a class="reference internal" href="#head-node">Head Node</a></li>
+<li><a class="reference internal" href="#storage-nodes-optional">Storage Nodes (OPTIONAL)</a></li>
+<li><a class="reference internal" href="#compute-nodes">Compute Nodes</a></li>
+<li><a class="reference internal" href="#other">Other</a></li>
+<li><a class="reference internal" href="#aprox-maximum-hardware-cost">Aprox Maximum Hardware Cost</a></li>
+<li><a class="reference internal" href="#operating-system">Operating System</a><ul>
+<li><a class="reference internal" href="#os-install">OS Install</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="intro.html"
+                        title="previous chapter">Introduction</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="firewall.html"
+                        title="next chapter">Configuring The Firewall/Router</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/setup.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="firewall.html" title="Configuring The Firewall/Router"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="intro.html" title="Introduction"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Nukestar 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2014, william gurecky.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,31 @@
+---
+- name: Install nfs-server on storage nodes
+  apt: nfs-kernel-server
+
+- name: Check if glusterfs is already installed
+  shell: dpkg -s glusterfs-server
+  register: gluster_exists
+
+- name: Grab glusterfs and zfsonlinux from interweb
+  shell: "{{ item }}"
+  with_items:
+    - wget -O - http://download.gluster.org/pub/gluster/glusterfs/3.5/3.5.1/Debian/pubkey.gpg | apt-key add -
+    - echo deb http://download.gluster.org/pub/gluster/glusterfs/3.5/3.5.1/Debian/apt wheezy main > 
+               /etc/apt/sources.list.d/gluster.list
+    - apt-get update
+  when: gluster_exists.stdout.find('is not installed') == 1
+
+# - name: Setup zfsonlinux
+#   shell: "{{ item }}"
+#   with_items:
+#     - wget http://archive.zfsonlinux.org/debian/pool/main/z/zfsonlinux/zfsonlinux_2%7Ewheezy_all.deb
+#     - dpkg -i zfsonlinux_2~wheezy_all.deb
+#     - echo 'deb http://archive.zfsonlinux.org/debian wheezy-daily main' > /etc/apt/sources.list.d/zfsonlinux.list
+#     - apt-get update
+#   when: gluster_exists.stdout.find('is not installed') == 1
+
+- name:  Update storage software
+  apt: name="{{ item }}" 
+  with_items:
+    - apt-get update
+    - glusterfs-server

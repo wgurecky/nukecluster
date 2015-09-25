@@ -1,0 +1,19 @@
+# /etc/ansible/hosts
+#
+# This file must be kept up to date
+#
+
+# Head node(s)
+[hnode]
+    192.168.1.101
+
+# Storage nodes
+#[snodes]
+#    192.168.1.102
+#    192.168.1.103
+
+# Chroot directory of computenode install
+[cnodes]
+    /srv/nukeroot  ansible_connection=chroot
+
+

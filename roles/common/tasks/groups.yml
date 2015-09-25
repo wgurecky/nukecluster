@@ -1,0 +1,8 @@
+---
+# Ensures that all groups listed in this file
+# exist on all nodes
+- name: Update groups
+  group: name="{{ item }}" state=present
+  with_items: cluster_groups
+  tags:
+    - usermod

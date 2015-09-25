@@ -1,0 +1,36 @@
+---
+- name: Install base software on all nodes
+  apt:  name= " {{ item }} "
+  with_items: 
+    - build-essential 
+    - python 
+    - python-dev 
+    - python3-pip 
+    - python3-dev 
+    - python-pip 
+    - python3 
+    - libblas-dev 
+    - liblapack-dev 
+    - openssh-server 
+    - openssh-client 
+    - m4 
+    - gfortran
+    - nfs-common 
+    - wget 
+    - environment-modules
+
+- name: Install base python2.7 packages
+  pip:  "{{ item }}" executable=pip-2.7
+  with_items:
+    - numpy
+    - scipy
+    - matplotlib
+    - mpi4py
+
+- name: Install base python3.2 packages
+  pip:  "{{ item }}" executable=pip-3.4
+  with_items:
+    - numpy
+    - scipy
+    - matplotlib
+    - mpi4py
