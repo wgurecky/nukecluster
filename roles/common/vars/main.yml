@@ -41,13 +41,21 @@ ssh_users:
 
 # List of groups.  Add or remove groups from the cluster here.
 cluster_groups: 
-  - users
-  - sudo
-  - mcnpx
-  - mcnp6
-  - njoy
-  - serpent
-  - origin
-  - vera-admin
+  - name: vera-admin
+    gid:  2101
+  - name: mcnpx
+    gid:  2102
+  - name: mcnp6
+    gid:  2103
+  - name: origin
+    gid:  2104
+  - name: njoy
+    gid:  2105
+  - name: serpent
+    gid:  2106
+  - name: users
+    gid:  2100
+  - name: sudo
+    gid:  2000
 
 keys_dir:  /root/nukecluster/roles/common/files

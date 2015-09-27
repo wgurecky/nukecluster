@@ -1,5 +1,6 @@
 ---
 # Run this playbook anytime users or groups are modified
+#         groups={{ item.groups }}
 - name: Update users list
   user:  name={{ item.name }}
          shell={{ item.shell }} 

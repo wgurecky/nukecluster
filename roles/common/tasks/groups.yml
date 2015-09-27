@@ -1,8 +1,13 @@
 ---
-# Ensures that all groups listed in this file
-# exist on all nodes
-- name: Update groups
-  group: name="{{ item }}" state=present
+# Syncs groups / gids on the cluster
+- name: Update user groups
+  group: name={{ item.name }} gid={{ item.uid }} state=present
+  with_items: ssh_users
+  tags:
+    - usermod
+
+- name: Update other groups
+  group: name={{ item.name }} gid={{ item.gid }} state=present
   with_items: cluster_groups
   tags:
     - usermod
