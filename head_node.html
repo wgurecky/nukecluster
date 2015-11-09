@@ -1,0 +1,343 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Configure Head Node &mdash; Nukestar 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Nukestar 0.1 documentation" href="index.html" />
+    <link rel="next" title="User and Group Management" href="user_management.html" />
+    <link rel="prev" title="Configuring The Firewall/Router" href="firewall.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="user_management.html" title="User and Group Management"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="firewall.html" title="Configuring The Firewall/Router"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Nukestar 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="configure-head-node">
+<h1>Configure Head Node<a class="headerlink" href="#configure-head-node" title="Permalink to this headline">¶</a></h1>
+<p>Become root on the head node</p>
+<div class="highlight-python"><div class="highlight"><pre>su -
+</pre></div>
+</div>
+<p>Update <code class="docutils literal"><span class="pre">/etc/hosts</span></code>.  Ensure this file contains all IPs and hostnames of all nodes</p>
+<div class="highlight-python"><div class="highlight"><pre>192.168.1.101  nukestar01
+192.168.1.102  nukestar02
+192.168.1.103  nukestar03
+192.168.1.104  nukestar04
+192.168.1.105  nukestar05
+192.168.1.106 nukestar06
+</pre></div>
+</div>
+<p>Install prerequisite software</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#apt-get update</span>
+<span class="c">#apt-get install tftpd-hpa nfs-kernel-server debootstrap syslinux ssh nfs-common pxelinux ntp</span>
+</pre></div>
+</div>
+<p>Make root rsa ssh key pair</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#cd /root</span>
+<span class="c">#ssh-keygen -t rsa</span>
+</pre></div>
+</div>
+<p>do not set a password when propted (password-less key based login will be used).</p>
+<div class="section" id="setup-chroot">
+<h2>Setup Chroot<a class="headerlink" href="#setup-chroot" title="Permalink to this headline">¶</a></h2>
+<p>Make a chroot root dir and chroot home dir.  Debootstrap install into /srv/nukeroot directory.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#mkdir /srv/nukeroot /srv/nukehome</span>
+<span class="c">#debootstrap jessie /srv/nukeroot http://http.debian.net/debian</span>
+</pre></div>
+</div>
+<p>Update <code class="docutils literal"><span class="pre">/etc/fstab</span></code> on host OS</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#echo &quot;/srv/nukehome /srv/nukeroot/home bind defaults,bind 0 0&quot; &gt;&gt; /etc/fstab</span>
+<span class="c">#echo &quot;/dev /srv/nukeroot/dev auto bind 0 0&quot; &gt;&gt; /etc/fstab</span>
+<span class="c">#echo &quot;/dev/pts /srv/nukeroot/dev/pts auto bind  0 0&quot; &gt;&gt; /etc/fstab</span>
+<span class="c">#mount -a</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="configure-chroot">
+<h2>Configure Chroot<a class="headerlink" href="#configure-chroot" title="Permalink to this headline">¶</a></h2>
+<p>Place the contents of the base OS root public ssh key: <code class="docutils literal"><span class="pre">/root/.ssh/id_rsa.pub</span></code>
+in the chroot <code class="docutils literal"><span class="pre">/srv/nukeroot/root/.ssh/authorized_keys</span></code> file.  Make the
+<code class="docutils literal"><span class="pre">/srv/nukeroot/root/.ssh/authorized_keys</span></code> file if it does not exist.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This is required for the Ansible scripts to work properly.  Ansible relies on communication over ssh.
+If you do not want to use the ansible scripts, then ignore.</p>
+</div>
+<p>Enter chroot</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#chroot /srv/nukeroot</span>
+</pre></div>
+</div>
+<p>All chroot commands will be preceeded with <code class="docutils literal"><span class="pre">#&gt;</span></code>.</p>
+<p>Clear contents of <code class="docutils literal"><span class="pre">#&gt;/etc/hostname</span></code> because hostname will be obained from DHCP server.</p>
+<p>Enable non-free package repo. Edit <code class="docutils literal"><span class="pre">#&gt;/etc/apt/sources.list</span></code> so it contains</p>
+<div class="highlight-python"><div class="highlight"><pre>deb http://http.debian.net/debian jessie main non-free
+</pre></div>
+</div>
+<p>Install base packages in chroot environment</p>
+<div class="highlight-python"><div class="highlight"><pre>#&gt;apt-get update
+#&gt;apt-get install aufs-tools nfs-client linux-image-3.16.0-4-amd64 vim ntp
+          initramfs-tools locales dialog build-essential firmware-bnx2
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">the firmware-bnx2 package contains NIC drivers for the Dell blades used in the
+current cluster.  You should identify which NIC drivers are needed for your perticular hardware.
+It is very important to get the proper NIC drivers installed in the chroot because they will
+be cooked into the iso that is distributed to the compute nodes on PXE boot.  If the proper
+NIC driver is not avalible on the iso, the network interface on the compute nodes will obviously
+not work and the compute nodes will fail to boot.</p>
+</div>
+<p>... Note:</p>
+<div class="highlight-python"><div class="highlight"><pre>The linux-image package version will change depending on what version of Debian is being run.
+3.16.0-4-amd64 is the version packaged with debian &quot;jessie&quot; (8.2).
+</pre></div>
+</div>
+<p>Generate root ssh keys in chroot</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#&gt;cd /root</span>
+<span class="c">#&gt;ssh-keygen -t rsa</span>
+</pre></div>
+</div>
+<p>Update <code class="docutils literal"><span class="pre">#&gt;/etc/hosts</span></code>.  Ensure this file contains all IPs and hostnames of all nodes</p>
+<div class="highlight-python"><div class="highlight"><pre>192.168.1.101  nukestar01
+192.168.1.102  nukestar02
+192.168.1.103  nukestar03
+192.168.1.104  nukestar04
+192.168.1.105  nukestar05
+192.168.1.106 nukestar06
+</pre></div>
+</div>
+<p>Update <code class="docutils literal"><span class="pre">#&gt;/etc/fstab</span></code> in chroot</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#&gt;echo &quot;nukestar01:/srv/nukehome /home nfs noatime 0 0&quot; &gt;&gt; /etc/fstab</span>
+</pre></div>
+</div>
+<p>Generate locales</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#&gt;locale-gen en_US.UTF-8</span>
+</pre></div>
+</div>
+<p>Configure initramfs. Ensure the following lines exists in
+<code class="docutils literal"><span class="pre">#&gt;/etc/initramfs-tools/initramfs.conf</span></code>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">BOOT</span><span class="o">=</span><span class="n">nfs</span>
+<span class="n">DEVICE</span><span class="o">=</span><span class="n">eth0</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The  compute network device name (eth0 in this example) may be subject to change depending on a variety of
+hardware factors.</p>
+</div>
+<p>Create initrd image</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#&gt; mkinitramfs -o initrd.image.netboot</span>
+</pre></div>
+</div>
+<p>Configure overlay file system script.  Aufs allows local changes to be
+stored in ram on the diskless clients</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#&gt; echo aufs &gt;&gt; /etc/initramfs-tools/modules</span>
+<span class="c">#&gt; vim /etc/initramfs-tools/scripts/init-bottom/aufs</span>
+</pre></div>
+</div>
+<p>Fill with the following</p>
+<div class="highlight-python"><div class="highlight"><pre>modprobe aufs
+mkdir /ro /rw /aufs
+mount -t tmpfs tmpfs /rw -o noatime,mode=0755
+mount --move $rootmnt /ro
+mount -t aufs aufs /aufs -o noatime,dirs=/rw:/ro=ro
+mkdir -p /aufs/rw /aufs/ro
+mount --move /ro /aufs/ro
+mount --move /rw /aufs/rw
+mount --move /aufs /root
+exit 0
+</pre></div>
+</div>
+<p>Make executable</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#&gt; chmod 777 /etc/initramfs-tools/scripts/init-bottom/aufs</span>
+</pre></div>
+</div>
+<p>Update boot image</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#&gt; update-initramfs -u</span>
+</pre></div>
+</div>
+<p>Set root password</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#&gt; passwd root</span>
+</pre></div>
+</div>
+<p>Exit chroot</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#&gt; exit</span>
+</pre></div>
+</div>
+<p>Copy contents of chroot root pub ssh key <code class="docutils literal"><span class="pre">/srv/nukeroot/root/.ssh/id_rsa.pub</span></code> to the
+base OS root <code class="docutils literal"><span class="pre">/root/.ssh/authorized_keys</span></code> file.</p>
+</div>
+<div class="section" id="tftp-and-pxe-boot-setup">
+<h2>TFTP and PXE boot Setup<a class="headerlink" href="#tftp-and-pxe-boot-setup" title="Permalink to this headline">¶</a></h2>
+<p>The following image illustrates the setup we are working towards:</p>
+<a class="reference internal image-reference" href="_images/nukestar_pxe.png"><img alt="_images/nukestar_pxe.png" class="align-center" src="_images/nukestar_pxe.png" style="width: 1061.9px; height: 484.4px;" /></a>
+<p>Back on the head node copy boot image to /srv/tftp</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># mkdir /srv/tftp</span>
+<span class="c"># cp /srv/nukeroot/boot/initrd.img* /srv/tftp/.</span>
+<span class="c"># cp /srv/nukeroot/boot/vmlinuz-* /srv/tftp/.</span>
+<span class="c"># cp /usr/lib/PXELINUX/pxelinux.0 /srv/tftp/.</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">the location of pxelinux.0 may change depending on the distribution. See specific distribution
+notes on where pxelinux.0 will be placed by the syslinux or pxelinux package.</p>
+</div>
+<p>Configure PXE</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># mkdir /srv/tftp/pxelinux.cfg</span>
+</pre></div>
+</div>
+<p>Fill <code class="docutils literal"><span class="pre">#/srv/tftp/pxelinux.cfg/default</span></code> with</p>
+<div class="highlight-python"><div class="highlight"><pre>default Debian
+prompt 1
+timeout 5
+label Debian
+kernel vmlinuz-&lt;name_of_image&gt;
+append ro initrd=initrd.img-&lt;name_of_image&gt; root=/dev/nfs ip=dhcp nfsroot=stor01:/nukeroot
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">where &lt;name_of_image&gt; may be something like &#8220;3.16.0-4-amd64&#8221;.  See filename of
+/srv/nukeroot/boot/vmlinuz-*</p>
+</div>
+<p>Fill <code class="docutils literal"><span class="pre">#/etc/default/tftpd-hpa</span></code> with the following</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">TFTP_USERNAME</span> <span class="o">=</span> <span class="s">&quot;tftp&quot;</span>
+<span class="n">TFTP_DIRECTORY</span> <span class="o">=</span> <span class="s">&quot;/srv/nukeroot&quot;</span>
+<span class="n">TFTP_ADDRESS</span> <span class="o">=</span> <span class="s">&quot;0.0.0.0:69&quot;</span>
+<span class="n">TFTP_OPTIONS</span> <span class="o">=</span> <span class="s">&quot;--secure&quot;</span>
+</pre></div>
+</div>
+<p>Restart tftpd-hpa</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#/etc/init.d/tftpd-hpa restart</span>
+</pre></div>
+</div>
+<p>Edit <code class="docutils literal"><span class="pre">#/etc/exports</span></code> file to contain NFS export details</p>
+<div class="highlight-python"><div class="highlight"><pre>/srv/nukeroot  192.168.1.102(ro,no_root_squash,async,insecure,no_subtree_check) \
+192.168.1.103(ro,no_root_squash,async,insecure,no_subtree_check) \
+192.168.1.104(ro,no_root_squash,async,insecure,no_subtree_check) \
+192.168.1.105(ro,no_root_squash,async,insecure,no_subtree_check) \
+192.168.1.106(ro,no_root_squash,async,insecure,no_subtree_check)
+#
+/srv/nukehome  192.168.1.102(rw,no_root_squash,async,insecure,no_subtree_check) \
+192.168.1.103(rw,no_root_squash,async,insecure,no_subtree_check) \
+192.168.1.104(rw,no_root_squash,async,insecure,no_subtree_check) \
+192.168.1.105(rw,no_root_squash,async,insecure,no_subtree_check) \
+192.168.1.106(rw,no_root_squash,async,insecure,no_subtree_check)
+</pre></div>
+</div>
+<p>Run</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#exportfs -ra</span>
+</pre></div>
+</div>
+<p>You can now configure the compute nodes&#8217; to network boot via their bios menus.  Typically, the option to PXE (or network) boot
+exists in the boot menu.  All other boot options can be disabled.  Once configured,  boot up all the compute nodes
+and enjoy stateless node convinience!</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Configure Head Node</a><ul>
+<li><a class="reference internal" href="#setup-chroot">Setup Chroot</a></li>
+<li><a class="reference internal" href="#configure-chroot">Configure Chroot</a></li>
+<li><a class="reference internal" href="#tftp-and-pxe-boot-setup">TFTP and PXE boot Setup</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="firewall.html"
+                        title="previous chapter">Configuring The Firewall/Router</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="user_management.html"
+                        title="next chapter">User and Group Management</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/head_node.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="user_management.html" title="User and Group Management"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="firewall.html" title="Configuring The Firewall/Router"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Nukestar 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2014, william gurecky.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+    </div>
+  </body>
+</html>
