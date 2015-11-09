@@ -9,7 +9,7 @@
 GH_PAGES_SOURCES="source Makefile"
 git checkout gh-pages
 #rm -rf build _sources _static
-touch ../.nojekyll
+touch ./.nojekyll
 git checkout master doc/source doc/Makefile
 git reset HEAD
 cd doc
