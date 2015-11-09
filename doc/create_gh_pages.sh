@@ -9,11 +9,11 @@
 GH_PAGES_SOURCES="source Makefile"
 git checkout gh-pages
 #rm -rf build _sources _static
-#touch .nojekyll
-git checkout master $GH_PAGES_SOURCES
+touch ../.nojekyll
+git checkout master doc/source doc/Makefile
 git reset HEAD
 make html
-mv -fv build/html/* ./
-rm -rf $GH_PAGES_SOURCES build
+mv -fv build/html/* ../.
+rm -rf source Makefile build
 git add -A
 git commit -m "Gen gh-pages for `git log master -1 --pretty=short --abbrev-commit`" && git push origin gh-pages ; git checkout master
