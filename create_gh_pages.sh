@@ -12,8 +12,10 @@ git checkout gh-pages
 touch ../.nojekyll
 git checkout master doc/source doc/Makefile
 git reset HEAD
+cd doc
 make html
 mv -fv build/html/* ../.
 rm -rf source Makefile build
+cd ..
 git add -A
 git commit -m "Gen gh-pages for `git log master -1 --pretty=short --abbrev-commit`" && git push origin gh-pages ; git checkout master
