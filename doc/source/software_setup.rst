@@ -48,3 +48,87 @@ Then update the contents of ~/.bashrc.  Uncomment the line ::
    module() { eval `/usr/bin/modulecmd $module_shell $*`; }
 
 and comment out any other ``module()`` definition.
+
+
+TORQUE / MAUI systemd scripts
+-----------------------------
+
+On the head node we must start the ``pbs_server``, ``maui``, and ``pbs_mom`` daemons.  On the compute nodes, on the ``pbs_mom`` service is required.
+
+Start by creating systemd scripts on the head node::
+
+    #touch /etc/systemd/system/pbs.service
+    #touch /usr/bin/pbs
+
+Fill ``/etc/systemd/system/pbs.service`` with the following::
+
+    [Unit]
+    Description=Start pbs on head node
+
+    [Service]
+    Type=oneshot
+    ExecStart=/usr/bin/pbs start
+    ExecStop=/usr/bin/pbs stop
+    RemainAfterExit=yes
+
+    [Install]
+    WantedBy=multi-user.target
+
+Fill ``/usr/bin/pbs`` with::
+
+    start(){
+    exec /usr/local/sbin/pbs_server
+    exec /usr/local/maui/sbin/maui
+    exec /usr/local/sbin/pbs_mom
+    }
+
+    stop(){
+    killall pbs_mom
+    killall maui
+    killall pbs_server
+    }
+
+    case $1 in
+      start|stop) "$1" ;;
+    esac
+
+Enable exec on boot with::
+
+    #systemctl enable pbs.service
+
+In the chroot we must do the following::
+
+    $>touch /etc/systemd/system/pbs.service
+    $>touch /usr/bin/pbs
+
+Fill ``$>/etc/systemd/system/pbs.service`` with the following::
+
+    [Unit]
+    Description=Start pbs on head node
+
+    [Service]
+    Type=oneshot
+    ExecStart=/usr/bin/pbs start
+    ExecStop=/usr/bin/pbs stop
+    RemainAfterExit=yes
+
+    [Install]
+    WantedBy=multi-user.target
+
+Fill ``$>/usr/bin/pbs`` with::
+
+    start(){
+    exec /usr/local/sbin/pbs_mom
+    }
+
+    stop(){
+    killall pbs_mom
+    }
+
+    case $1 in
+      start|stop) "$1" ;;
+    esac
+
+Enable exec on boot with::
+
+    $>systemctl enable pbs.service

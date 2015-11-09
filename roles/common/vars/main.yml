@@ -39,6 +39,11 @@ ssh_users:
     shell: /bin/bash
     uid: 1014
 
+  - name: rmorneau
+    groups: users,mcnpx,mcnp6,njoy
+    shell: /bin/bash
+    uid: 1015
+
 # List of groups.  Add or remove groups from the cluster here.
 cluster_groups: 
   - name: vera-admin
