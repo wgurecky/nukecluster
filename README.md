@@ -1,6 +1,9 @@
 The Nukestar Cluster Package
 ============================
 
+Documentation avalible at:
+<https://wgurecky.github.io/nukecluster>
+
 This package contains an introductory setup and
 maintenance guide for the Nukestar Computing Cluster at The University of Texas
 at Austin.  Setup and maintenance scripts are also provided.
