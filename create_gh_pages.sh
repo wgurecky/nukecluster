@@ -1,8 +1,13 @@
 #!/bin/bash
 #
+# This script switches to the github-pages doc branch,
+# auto generates html from .rst files using sphinx 
+# pushes the resulting html files to github and finally
+# switches back to the master branch
+#
 # Notes:
 # ------
-# Requires sphinx is install, auto html doc builder
+# Requires sphinx is installed: auto html doc builder
 # Requires the following var is set in the sphinx makefile:
 # GH_PAGES_SOURCES = source Makefile
 
