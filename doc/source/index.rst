@@ -12,7 +12,7 @@ Users Guide
 .. toctree::
    :glob:
 
-   software*
+   users*
 
 Admin Guide
 -----------
