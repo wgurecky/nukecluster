@@ -6,7 +6,16 @@
 Welcome to Nukestar's documentation!
 ====================================
 
-Contents:
+Users Guide
+-----------
+
+.. toctree::
+   :glob:
+
+   software*
+
+Admin Guide
+-----------
 
 .. toctree::
    :glob:
