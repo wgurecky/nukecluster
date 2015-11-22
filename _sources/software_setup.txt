@@ -27,7 +27,7 @@ In the chroot / compute node environment, the following software will be install
 Base OS software
 -----------------
 
-Instal scripts for Torque / maui can be found in the /bash folder of this repo.  
+Install scripts for Torque / maui can be found in the /bash folder of this repo.  
 
 Chroot / Compute Node Software
 -------------------------------
@@ -53,7 +53,7 @@ and comment out any other ``module()`` definition.
 TORQUE / MAUI systemd scripts
 -----------------------------
 
-On the head node we must start the ``pbs_server``, ``maui``, and ``pbs_mom`` daemons.  On the compute nodes, on the ``pbs_mom`` service is required.
+On the head node we must start the ``pbs_server``, ``maui``, and ``pbs_mom`` daemons.  On the compute nodes, only the ``pbs_mom`` service is required.  It is convinient to have these services automatically start on system boot up.  This can be achived by writing simple systemd startup scripts.
 
 Start by creating systemd scripts on the head node::
 
@@ -98,13 +98,13 @@ Enable exec on boot with::
 
 In the chroot we must do the following::
 
-    $>touch /etc/systemd/system/pbs.service
-    $>touch /usr/bin/pbs
+    #>touch /etc/systemd/system/pbs.service
+    #>touch /usr/bin/pbs
 
 Fill ``$>/etc/systemd/system/pbs.service`` with the following::
 
     [Unit]
-    Description=Start pbs on head node
+    Description=Start pbs monitor on compute node
 
     [Service]
     Type=oneshot
@@ -131,4 +131,4 @@ Fill ``$>/usr/bin/pbs`` with::
 
 Enable exec on boot with::
 
-    $>systemctl enable pbs.service
+    #>systemctl enable pbs.service

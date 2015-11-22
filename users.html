@@ -95,7 +95,7 @@
 </div>
 <div class="section" id="data-transfer-to-from-nukestar">
 <h2>Data transfer to/from Nukestar<a class="headerlink" href="#data-transfer-to-from-nukestar" title="Permalink to this headline">¶</a></h2>
-<p>Transfering data to and from nukestar can be done with a utility called <a class="reference external" href="linux.die.net/man/1/scp">scp</a> (secure copy protocall). You will need to install scp on your local machine if you want to use it. There are alternatives: <a class="reference external" href="filezilla-project.org">Filezilla</a> is a GUI program that can proform the same function as scp.</p>
+<p>Transfering data to and from nukestar can be done with a utility called <a class="reference external" href="http://linux.die.net/man/1/scp">scp</a> (secure copy protocall). You will need to install scp on your local machine if you want to use it. There are alternatives: <a class="reference external" href="http://filezilla-project.org">Filezilla</a> is a GUI program that can proform the same function as scp.</p>
 <p>If you want to push data from your local machine to nukestar:</p>
 <div class="highlight-python"><div class="highlight"><pre>$scp /path/to/data/file/on/your/local/machine.txt  &lt;user_name&gt;@nukestar.me.utexas.edu:~/destination/path/.
 </pre></div>
@@ -108,7 +108,7 @@
 <div class="highlight-python"><div class="highlight"><pre>$scp -r &lt;username&gt;@nukestar.me.utexas.edu:&lt;source_folder&gt; &lt;destination_folder&gt;
 </pre></div>
 </div>
-<p>If transfering many small data or text files it may be much faster to use a utility called <a class="reference external" href="rsync.samba.org">rsync</a> (which should be avalible on any linux or OSX install. An example syntax for pulling an entire folder from nukestar to your local machine using rsync is given bellow:</p>
+<p>If transfering many small data or text files it may be much faster to use a utility called <a class="reference external" href="http://rsync.samba.org">rsync</a> (which should be avalible on any linux or OSX install. An example syntax for pulling an entire folder from nukestar to your local machine using rsync is given bellow:</p>
 <div class="highlight-python"><div class="highlight"><pre>$rsync -avze ssh &lt;user_name&gt;@nukestar.me.utexas.edu:~/path/to/data  &lt;destination_path&gt; --progress
 </pre></div>
 </div>
@@ -313,10 +313,10 @@ $mpiexec --version
 <li><p class="first"><a class="reference external" href="https://mit-crpg.gitbut.io/openmc/">openMC</a>: Monte Carlo Neutron Transport</p>
 </li>
 <li><dl class="first docutils">
-<dt><a class="reference external" href="www.casl.gov/vera.shtml">VERA</a>: The Virtual Environment for Reactor Analysis</dt>
+<dt><a class="reference external" href="http://www.casl.gov/vera.shtml">VERA</a>: The Virtual Environment for Reactor Analysis</dt>
 <dd><ul class="first last simple">
 <li>MPACT:  Method of characteristic deterministic transport with built in depletion capability</li>
-<li>COBRA-TF:  Nodal thermal hydraulics code</li>
+<li>COBRA-TF:  Nodal thermal hydraulics</li>
 <li>Insilico:  Sn transport</li>
 </ul>
 </dd>
@@ -325,7 +325,7 @@ $mpiexec --version
 <li><p class="first">NJOY: Cross section processing</p>
 </li>
 <li><dl class="first docutils">
-<dt><a class="reference external" href="scale.ornl.gov">SCALE6.1</a>:</dt>
+<dt><a class="reference external" href="http://scale.ornl.gov">SCALE6.1</a>:</dt>
 <dd><ul class="first last simple">
 <li>origen: Burn-up and Depletion</li>
 <li>origen-arp:  simple burn-up and depletion (no gui)</li>
@@ -334,16 +334,16 @@ $mpiexec --version
 </dd>
 </dl>
 </li>
-<li><p class="first"><a href="#id1"><span class="problematic" id="id2">OPENFOAM_</span></a>: General PDE c++ toolkit useful for CFD</p>
+<li><p class="first"><a class="reference external" href="http://www.openfoam.org">openFOAM</a>: General PDE c++ toolkit useful for CFD</p>
 </li>
 <li><dl class="first docutils">
 <dt>Python3.2 and Packages:</dt>
 <dd><ul class="first last simple">
-<li><a class="reference external" href="www.numpy.org">Numpy</a>: Linear algebra library</li>
-<li><a class="reference external" href="www.scipy.org">Scipy</a>: Scientific and numerical routine library.</li>
-<li><a class="reference external" href="matplotlib.org">matplotlib</a>:  General plotting library</li>
+<li><a class="reference external" href="http://www.numpy.org">Numpy</a>: Linear algebra library</li>
+<li><a class="reference external" href="http://www.scipy.org">Scipy</a>: Scientific and numerical routine library.</li>
+<li><a class="reference external" href="http://matplotlib.org">matplotlib</a>:  General plotting library</li>
 <li>mpi4py:  MPI library for python</li>
-<li><a class="reference external" href="pythonhosted.org/mpi4py/">h5py</a>:  HDF5 library for python</li>
+<li><a class="reference external" href="http://pythonhosted.org/mpi4py/">h5py</a>:  HDF5 library for python</li>
 <li>tables</li>
 </ul>
 </dd>
@@ -355,7 +355,7 @@ $mpiexec --version
 <li>Numpy</li>
 <li>Scipy</li>
 <li>matplotlib:  General plotting library</li>
-<li><a class="reference external" href="pyne.io">PYNE</a>:  Nuclear engineering python toolkit</li>
+<li><a class="reference external" href="http://pyne.io">PYNE</a>:  Nuclear engineering python toolkit</li>
 <li>h5py</li>
 <li>mpi4py:  MPI library for python</li>
 <li>tables</li>
@@ -366,8 +366,8 @@ $mpiexec --version
 </li>
 </ul>
 </div></blockquote>
-<p>This list is always being expanded, contact the system admins if you are unsure
-if a peice of software you want to use is already installed.</p>
+<p>This list is being expanded, contact the system admins if you are unsure
+if a piece of software you want to use is already installed.</p>
 </div>
 
 
