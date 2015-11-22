@@ -56,8 +56,8 @@ Data transfer to/from Nukestar
 
 Transfering data to and from nukestar can be done with a utility called scp_ (secure copy protocall). You will need to install scp on your local machine if you want to use it. There are alternatives: Filezilla_ is a GUI program that can proform the same function as scp.
 
-.. _scp: linux.die.net/man/1/scp
-.. _Filezilla: filezilla-project.org
+.. _scp: http://linux.die.net/man/1/scp
+.. _Filezilla: http://filezilla-project.org
 
 If you want to push data from your local machine to nukestar::
 
@@ -75,7 +75,7 @@ If transfering many small data or text files it may be much faster to use a util
 
     $rsync -avze ssh <user_name>@nukestar.me.utexas.edu:~/path/to/data  <destination_path> --progress
 
-.. _rsync: rsync.samba.org
+.. _rsync: http://rsync.samba.org
 
 Visualizing Results
 -------------------
@@ -292,14 +292,14 @@ The following packages are already installed on Nukestar:
     * openMC_: Monte Carlo Neutron Transport
     * VERA_: The Virtual Environment for Reactor Analysis
         - MPACT:  Method of characteristic deterministic transport with built in depletion capability
-        - COBRA-TF:  Nodal thermal hydraulics code
+        - COBRA-TF:  Nodal thermal hydraulics
         - Insilico:  Sn transport
     * NJOY: Cross section processing
     * SCALE6.1_:
         - origen: Burn-up and Depletion
         - origen-arp:  simple burn-up and depletion (no gui)
         - KENOVI: Monte Carlo Neutron Transport
-    * OPENFOAM_: General PDE c++ toolkit useful for CFD
+    * openFOAM_: General PDE c++ toolkit useful for CFD
     * Python3.2 and Packages:
         - Numpy_: Linear algebra library
         - Scipy_: Scientific and numerical routine library.
@@ -317,15 +317,16 @@ The following packages are already installed on Nukestar:
         - tables
         - fipy:  Finite volume PDE library
 
-.. _PYNE: pyne.io
-.. _SCALE6.1: scale.ornl.gov
+.. _openFOAM: http://www.openfoam.org
+.. _PYNE: http://pyne.io
+.. _SCALE6.1: http://scale.ornl.gov
 .. _MCNP6: https://mcnp.lanl.gov
-.. _VERA:  www.casl.gov/vera.shtml
+.. _VERA:  http://www.casl.gov/vera.shtml
 .. _openMC: https://mit-crpg.gitbut.io/openmc/
-.. _Scipy: www.scipy.org
-.. _Numpy: www.numpy.org
-.. _matplotlib: matplotlib.org
-.. _h5py: pythonhosted.org/mpi4py/
+.. _Scipy: http://www.scipy.org
+.. _Numpy: http://www.numpy.org
+.. _matplotlib: http://matplotlib.org
+.. _h5py: http://pythonhosted.org/mpi4py/
 
-This list is always being expanded, contact the system admins if you are unsure
-if a peice of software you want to use is already installed.
+This list is being expanded, contact the system admins if you are unsure
+if a piece of software you want to use is already installed.
