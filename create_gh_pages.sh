@@ -12,6 +12,8 @@
 # GH_PAGES_SOURCES = source Makefile
 
 if [-n "$git status --porcelain)" ]; then
+  echo "Commit master changes before building docs.";
+else
   echo "Master is clean. Building docs...";
   GH_PAGES_SOURCES="source Makefile"
   git checkout gh-pages
@@ -26,6 +28,4 @@ if [-n "$git status --porcelain)" ]; then
   cd ..
   git add -A
   git commit -m "Gen gh-pages for `git log master -1 --pretty=short --abbrev-commit`" && git push origin gh-pages ; git checkout master
-else
-  echo "Commit master changes before building docs.";
 fi
