@@ -84,7 +84,7 @@ To use a GUI program through an SSH connection (such as MCNP’s plotter) you ne
 
     $ssh -X <user_name>@nukestar.me.utexas.edu
 
-..Note::
+.. Note::
     Windows users will need to install Xorg on their local machine. The freely avalible Cygwin package contains Xorg for windows.
 
 Environment Modules
@@ -244,11 +244,11 @@ The following PBS script submits an job to cluster utilizing 24 cores on node nu
     # CONTINUE card, place a continue indicator in the
     # mcnp run parameters
 
-..Note::
+.. Note::
     The the ``#PBS -S /bin/bash`` line is required if you want to use env vars set in your ``~/.bashrc`` or ``~/.bash_profile``.
     In this case, it was necissary in order to load the mcnp6 module file via: ``module load mcnp6``.
 
-..Note::
+.. Note::
     When submitting jobs keep in mind you cannot request more cores on a node than the node physically has.
     The number of cores per node is given bellow:
        - nukestar01:  2
@@ -288,18 +288,19 @@ Avalible Software
 
 The following packages are already installed on Nukestar:
 
-    * MCNP6_: Monte Carlo Particle Transport
+    * MCNP6_: Monte Carlo Particle Transport  \*(Requires personal RSICC license to be presented to sys admins before use)
     * openMC_: Monte Carlo Neutron Transport
-    * VERA_: The Virtual Environment for Reactor Analysis
+    * VERA_: The Virtual Environment for Reactor Analysis \*(Requires proof of ORNL / RSICC license)
         - MPACT:  Method of characteristic deterministic transport with built in depletion capability
         - COBRA-TF:  Nodal thermal hydraulics
         - Insilico:  Sn transport
-    * NJOY: Cross section processing
+    * NJOY: Cross section processing  \*(Requires proof of RSICC license)
     * SCALE6.1_:
         - origen: Burn-up and Depletion
         - origen-arp:  simple burn-up and depletion (no gui)
         - KENOVI: Monte Carlo Neutron Transport
     * openFOAM_: General PDE c++ toolkit useful for CFD
+    * startCCM+: CFD software \*(Limited License, ask system admins for acess)
     * Python3.2 and Packages:
         - Numpy_: Linear algebra library
         - Scipy_: Scientific and numerical routine library.
@@ -322,7 +323,7 @@ The following packages are already installed on Nukestar:
 .. _SCALE6.1: http://scale.ornl.gov
 .. _MCNP6: https://mcnp.lanl.gov
 .. _VERA:  http://www.casl.gov/vera.shtml
-.. _openMC: https://mit-crpg.gitbut.io/openmc/
+.. _openMC: https://mit-crpg.github.io/openmc/
 .. _Scipy: http://www.scipy.org
 .. _Numpy: http://www.numpy.org
 .. _matplotlib: http://matplotlib.org
@@ -330,3 +331,6 @@ The following packages are already installed on Nukestar:
 
 This list is being expanded, contact the system admins if you are unsure
 if a piece of software you want to use is already installed.
+
+.. Note::
+	Some codes require the user to present the necissary license information to the system admins before access is granted to the software package.  Examples include MCNP, NJOY, VERA, and SCALE.
