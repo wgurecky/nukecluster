@@ -119,10 +119,10 @@
 <div class="highlight-python"><div class="highlight"><pre>$ssh -X &lt;user_name&gt;@nukestar.me.utexas.edu
 </pre></div>
 </div>
-<dl class="docutils">
-<dt>..Note::</dt>
-<dd>Windows users will need to install Xorg on their local machine. The freely avalible Cygwin package contains Xorg for windows.</dd>
-</dl>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Windows users will need to install Xorg on their local machine. The freely avalible Cygwin package contains Xorg for windows.</p>
+</div>
 </div>
 </div>
 <div class="section" id="environment-modules">
@@ -264,12 +264,14 @@ n=$RUNNAME&quot;.&quot;
 # mcnp run parameters
 </pre></div>
 </div>
-<dl class="docutils">
-<dt>..Note::</dt>
-<dd>The the <code class="docutils literal"><span class="pre">#PBS</span> <span class="pre">-S</span> <span class="pre">/bin/bash</span></code> line is required if you want to use env vars set in your <code class="docutils literal"><span class="pre">~/.bashrc</span></code> or <code class="docutils literal"><span class="pre">~/.bash_profile</span></code>.
-In this case, it was necissary in order to load the mcnp6 module file via: <code class="docutils literal"><span class="pre">module</span> <span class="pre">load</span> <span class="pre">mcnp6</span></code>.</dd>
-<dt>..Note::</dt>
-<dd><p class="first">When submitting jobs keep in mind you cannot request more cores on a node than the node physically has.
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The the <code class="docutils literal"><span class="pre">#PBS</span> <span class="pre">-S</span> <span class="pre">/bin/bash</span></code> line is required if you want to use env vars set in your <code class="docutils literal"><span class="pre">~/.bashrc</span></code> or <code class="docutils literal"><span class="pre">~/.bash_profile</span></code>.
+In this case, it was necissary in order to load the mcnp6 module file via: <code class="docutils literal"><span class="pre">module</span> <span class="pre">load</span> <span class="pre">mcnp6</span></code>.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>When submitting jobs keep in mind you cannot request more cores on a node than the node physically has.
 The number of cores per node is given bellow:</p>
 <blockquote>
 <div><ul class="simple">
@@ -282,8 +284,7 @@ The number of cores per node is given bellow:</p>
 </ul>
 </div></blockquote>
 <p class="last">If you request more cores than a node has you job will hang in the queue indefinately.</p>
-</dd>
-</dl>
+</div>
 </div>
 </div>
 <div class="section" id="building-software">
@@ -308,12 +309,12 @@ $mpiexec --version
 <p>The following packages are already installed on Nukestar:</p>
 <blockquote>
 <div><ul>
-<li><p class="first"><a class="reference external" href="https://mcnp.lanl.gov">MCNP6</a>: Monte Carlo Particle Transport</p>
+<li><p class="first"><a class="reference external" href="https://mcnp.lanl.gov">MCNP6</a>: Monte Carlo Particle Transport  *(Requires personal RSICC license to be presented to sys admins before use)</p>
 </li>
-<li><p class="first"><a class="reference external" href="https://mit-crpg.gitbut.io/openmc/">openMC</a>: Monte Carlo Neutron Transport</p>
+<li><p class="first"><a class="reference external" href="https://mit-crpg.github.io/openmc/">openMC</a>: Monte Carlo Neutron Transport</p>
 </li>
 <li><dl class="first docutils">
-<dt><a class="reference external" href="http://www.casl.gov/vera.shtml">VERA</a>: The Virtual Environment for Reactor Analysis</dt>
+<dt><a class="reference external" href="http://www.casl.gov/vera.shtml">VERA</a>: The Virtual Environment for Reactor Analysis *(Requires proof of ORNL / RSICC license)</dt>
 <dd><ul class="first last simple">
 <li>MPACT:  Method of characteristic deterministic transport with built in depletion capability</li>
 <li>COBRA-TF:  Nodal thermal hydraulics</li>
@@ -322,7 +323,7 @@ $mpiexec --version
 </dd>
 </dl>
 </li>
-<li><p class="first">NJOY: Cross section processing</p>
+<li><p class="first">NJOY: Cross section processing  *(Requires proof of RSICC license)</p>
 </li>
 <li><dl class="first docutils">
 <dt><a class="reference external" href="http://scale.ornl.gov">SCALE6.1</a>:</dt>
@@ -335,6 +336,8 @@ $mpiexec --version
 </dl>
 </li>
 <li><p class="first"><a class="reference external" href="http://www.openfoam.org">openFOAM</a>: General PDE c++ toolkit useful for CFD</p>
+</li>
+<li><p class="first">startCCM+: CFD software *(Limited License, ask system admins for acess)</p>
 </li>
 <li><dl class="first docutils">
 <dt>Python3.2 and Packages:</dt>
@@ -368,6 +371,10 @@ $mpiexec --version
 </div></blockquote>
 <p>This list is being expanded, contact the system admins if you are unsure
 if a piece of software you want to use is already installed.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Some codes require the user to present the necissary license information to the system admins before access is granted to the software package.  Examples include MCNP, NJOY, VERA, and SCALE.</p>
+</div>
 </div>
 
 
