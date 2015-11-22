@@ -11,7 +11,7 @@
 # Requires the following var is set in the sphinx makefile:
 # GH_PAGES_SOURCES = source Makefile
 
-if [-n "$git status --porcelain)" ]; then
+if [-n "$(git status --porcelain)" ]; then
   echo "Commit master changes before building docs.";
 else
   echo "Master is clean. Building docs...";
