@@ -295,25 +295,26 @@ The following packages are already installed on Nukestar:
         - COBRA-TF:  Nodal thermal hydraulics
         - Insilico:  Sn transport
     * NJOY: Cross section processing  \*(Requires proof of RSICC license)
-    * SCALE6.1_:
+    * SCALE6.1_: \*(Requires RSICC license)
         - origen: Burn-up and Depletion
         - origen-arp:  simple burn-up and depletion (no gui)
         - KENOVI: Monte Carlo Neutron Transport
     * openFOAM_: General PDE c++ toolkit useful for CFD
     * startCCM+: CFD software \*(Limited License, ask system admins for acess)
-    * Python3.2 and Packages:
+    * Python3.4 and Packages:
         - Numpy_: Linear algebra library
         - Scipy_: Scientific and numerical routine library.
         - matplotlib_:  General plotting library
-        - mpi4py:  MPI library for python
+        - mpi4py_:  MPI library for python
         - h5py_:  HDF5 library for python
+        - PYNE_:  Nuclear engineering python toolkit
         - tables
     * Python2.7 and Pacakges:
         - Numpy
         - Scipy
         - matplotlib:  General plotting library
-        - PYNE_:  Nuclear engineering python toolkit
         - h5py
+	- PYNE
         - mpi4py:  MPI library for python
         - tables
         - fipy:  Finite volume PDE library
@@ -327,7 +328,8 @@ The following packages are already installed on Nukestar:
 .. _Scipy: http://www.scipy.org
 .. _Numpy: http://www.numpy.org
 .. _matplotlib: http://matplotlib.org
-.. _h5py: http://pythonhosted.org/mpi4py/
+.. _mpi4py: http://pythonhosted.org/mpi4py/
+.. _h5py: http://www.h5py.org
 
 This list is being expanded, contact the system admins if you are unsure
 if a piece of software you want to use is already installed.
