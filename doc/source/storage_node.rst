@@ -1,16 +1,17 @@
 Configure Storage Nodes
 +++++++++++++++++++++++
 
-Configuring cluster storage precedes configuing the head node or the 
-compute nodes.
+If seperate storage are desired; configuring cluster storage precedes configuing the head node or the 
+compute nodes.  This storage node configuratin guide assumes that the storage nodes already have a
+clean Debian installation on them.
 
-Here we will assume the storage node(s) have 2 drives available for both a
-home and a root glusterFS brick.
+Here we will assume we have 4 storage nodes and each node has 1 drive dedicated to the OS install and 2 drives available for both a
+home and a root glusterFS brick (5 drives total).  Of course, depending on hardware the final setup may change.
 
 Setup RAID on Each Storage Node
 -------------------------------
 
-create a single partition on disks ::
+create a single empty primary partition the target glusterFS disks ::
     
     fdisk /dev/sdb
     fdisk /dev/sdc
@@ -22,7 +23,7 @@ Setup RAID(s) ::
     mdadm --create --verbose /dev/md0 --level=mirror --raid-devices=2 /dev/sdb1 /dev/sdc1
     mdadm --create --verbose /dev/md1 --level=mirror --raid-devices=2 /dev/sdd1 /dev/sde1
 
-create filesystem(s) ::
+create ext4 filesystem(s) ::
 
     mkfs.ext4 /dev/md0
     mkfs.ext4 /dev/md1
@@ -42,7 +43,7 @@ run ::
 
     mount -a
 
-Ensure that ``/etc/hosts`` contains hostnames and IPs of other storage nodes.
+Ensure that ``/etc/hosts`` contains hostnames and IPs of other storage and compute nodes.
 
 Setup GlusterFS on Each Storage Node
 ------------------------------------
@@ -57,7 +58,7 @@ Install glusterFS. ::
 
 Configure glusterFS::
 
-    gluster peer probe (hostnames of OTHER storage nodes)
+    gluster peer probe <hostnames of OTHER storage nodes>
 
 When the above tasks have been completed on ALL storage nodes run:
 
@@ -71,3 +72,8 @@ Finish glusterFS install ::
     gluster volume info
     gluster volume start nukeroot
     gluster volume start nukehome
+
+Export GlusterFS as NFS share
+-----------------------------
+
+See documentation at www.gluster.org
