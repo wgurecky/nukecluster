@@ -18,17 +18,18 @@ rm -rf $TMPREPO
 mkdir -p -m 0755 $TMPREPO
 
 # create temp repo and cd into it
-git clone git@github.com:wgurecky/nukecluster.git $TMPREPO
+git clone https://github.com/wgurecky/nukecluster.git $TMPREPO
 echo "Changing into tmp directory"
 echo $TMPREPO
 cd $TMPREPO
+touch ./.nojekyll
 
 # checkout gh-pages in tmp repo
 git checkout gh-pages
 
 # update gh-pages branch with new html docs
 echo "Copying html sources"
-cp -r $SRCDOCS/ $TMPREPO
+cp -r $SRCDOCS/* $TMPREPO
 
 # Ensure all files get added to gh-pages branch
 echo "Adding new html sources"
