@@ -82,7 +82,7 @@ which is effectively the global &#8220;compute node&#8221; OS.</p>
 </ul>
 <div class="section" id="base-os-software">
 <h2>Base OS software<a class="headerlink" href="#base-os-software" title="Permalink to this headline">¶</a></h2>
-<p>Instal scripts for Torque / maui can be found in the /bash folder of this repo.</p>
+<p>Install scripts for Torque / maui can be found in the /bash folder of this repo.</p>
 </div>
 <div class="section" id="chroot-compute-node-software">
 <h2>Chroot / Compute Node Software<a class="headerlink" href="#chroot-compute-node-software" title="Permalink to this headline">¶</a></h2>
@@ -102,6 +102,88 @@ which is effectively the global &#8220;compute node&#8221; OS.</p>
 </div>
 <p>and comment out any other <code class="docutils literal"><span class="pre">module()</span></code> definition.</p>
 </div>
+<div class="section" id="torque-maui-systemd-scripts">
+<h2>TORQUE / MAUI systemd scripts<a class="headerlink" href="#torque-maui-systemd-scripts" title="Permalink to this headline">¶</a></h2>
+<p>On the head node we must start the <code class="docutils literal"><span class="pre">pbs_server</span></code>, <code class="docutils literal"><span class="pre">maui</span></code>, and <code class="docutils literal"><span class="pre">pbs_mom</span></code> daemons.  On the compute nodes, only the <code class="docutils literal"><span class="pre">pbs_mom</span></code> service is required.  It is convinient to have these services automatically start on system boot up.  This can be achived by writing simple systemd startup scripts.</p>
+<p>Start by creating systemd scripts on the head node:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#touch /etc/systemd/system/pbs.service</span>
+<span class="c">#touch /usr/bin/pbs</span>
+</pre></div>
+</div>
+<p>Fill <code class="docutils literal"><span class="pre">/etc/systemd/system/pbs.service</span></code> with the following:</p>
+<div class="highlight-python"><div class="highlight"><pre>[Unit]
+Description=Start pbs on head node
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/pbs start
+ExecStop=/usr/bin/pbs stop
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
+</pre></div>
+</div>
+<p>Fill <code class="docutils literal"><span class="pre">/usr/bin/pbs</span></code> with:</p>
+<div class="highlight-python"><div class="highlight"><pre>start(){
+exec /usr/local/sbin/pbs_server
+exec /usr/local/maui/sbin/maui
+exec /usr/local/sbin/pbs_mom
+}
+
+stop(){
+killall pbs_mom
+killall maui
+killall pbs_server
+}
+
+case $1 in
+  start|stop) &quot;$1&quot; ;;
+esac
+</pre></div>
+</div>
+<p>Enable exec on boot with:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#systemctl enable pbs.service</span>
+</pre></div>
+</div>
+<p>In the chroot we must do the following:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#&gt;touch /etc/systemd/system/pbs.service</span>
+<span class="c">#&gt;touch /usr/bin/pbs</span>
+</pre></div>
+</div>
+<p>Fill <code class="docutils literal"><span class="pre">$&gt;/etc/systemd/system/pbs.service</span></code> with the following:</p>
+<div class="highlight-python"><div class="highlight"><pre>[Unit]
+Description=Start pbs monitor on compute node
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/pbs start
+ExecStop=/usr/bin/pbs stop
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
+</pre></div>
+</div>
+<p>Fill <code class="docutils literal"><span class="pre">$&gt;/usr/bin/pbs</span></code> with:</p>
+<div class="highlight-python"><div class="highlight"><pre>start(){
+exec /usr/local/sbin/pbs_mom
+}
+
+stop(){
+killall pbs_mom
+}
+
+case $1 in
+  start|stop) &quot;$1&quot; ;;
+esac
+</pre></div>
+</div>
+<p>Enable exec on boot with:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#&gt;systemctl enable pbs.service</span>
+</pre></div>
+</div>
+</div>
 </div>
 
 
@@ -115,6 +197,7 @@ which is effectively the global &#8220;compute node&#8221; OS.</p>
 <li><a class="reference internal" href="#">Base Software</a><ul>
 <li><a class="reference internal" href="#base-os-software">Base OS software</a></li>
 <li><a class="reference internal" href="#chroot-compute-node-software">Chroot / Compute Node Software</a></li>
+<li><a class="reference internal" href="#torque-maui-systemd-scripts">TORQUE / MAUI systemd scripts</a></li>
 </ul>
 </li>
 </ul>

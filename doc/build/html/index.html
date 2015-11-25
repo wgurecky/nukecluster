@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="Nukestar 0.1 documentation" href="#" />
-    <link rel="next" title="Introduction" href="intro.html" /> 
+    <link rel="next" title="Remote Access" href="users.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -34,7 +34,7 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="intro.html" title="Introduction"
+          <a href="users.html" title="Remote Access"
              accesskey="N">next</a> |</li>
         <li class="nav-item nav-item-0"><a href="#">Nukestar 0.1 documentation</a> &raquo;</li> 
       </ul>
@@ -47,7 +47,37 @@
             
   <div class="section" id="welcome-to-nukestar-s-documentation">
 <h1>Welcome to Nukestar&#8217;s documentation!<a class="headerlink" href="#welcome-to-nukestar-s-documentation" title="Permalink to this headline">¶</a></h1>
-<p>Contents:</p>
+<a class="reference internal image-reference" href="_images/p52d.png"><img alt="_images/p52d.png" src="_images/p52d.png" style="width: 30%;" /></a>
+<a class="reference internal image-reference" href="_images/3x3gtube_Q_2.png"><img alt="_images/3x3gtube_Q_2.png" src="_images/3x3gtube_Q_2.png" style="width: 30%;" /></a>
+<a class="reference internal image-reference" href="_images/3x3gtube_R_2.png"><img alt="_images/3x3gtube_R_2.png" src="_images/3x3gtube_R_2.png" style="width: 30%;" /></a>
+<div class="section" id="users-guide">
+<h2>Users Guide<a class="headerlink" href="#users-guide" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="users.html">Remote Access</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="users.html#linux-osx">Linux / OSX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="users.html#windows-clients">Windows Clients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="users.html#dealing-with-broken-pipes">Dealing with “broken pipes”</a></li>
+<li class="toctree-l2"><a class="reference internal" href="users.html#data-transfer-to-from-nukestar">Data transfer to/from Nukestar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="users.html#visualizing-results">Visualizing Results</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="users.html#environment-modules">Environment Modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="users.html#example-environment-module">Example Environment Module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="users.html#submitting-jobs">Submitting Jobs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="users.html#pbs-scripts">PBS scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="users.html#pbs-script-example">PBS Script Example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="users.html#building-software">Building Software</a></li>
+<li class="toctree-l1"><a class="reference internal" href="users.html#avalible-software">Avalible Software</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="admin-guide">
+<h2>Admin Guide<a class="headerlink" href="#admin-guide" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
@@ -84,6 +114,7 @@
 <li class="toctree-l1"><a class="reference internal" href="software_setup.html">Base Software</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="software_setup.html#base-os-software">Base OS software</a></li>
 <li class="toctree-l2"><a class="reference internal" href="software_setup.html#chroot-compute-node-software">Chroot / Compute Node Software</a></li>
+<li class="toctree-l2"><a class="reference internal" href="software_setup.html#torque-maui-systemd-scripts">TORQUE / MAUI systemd scripts</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="storage_node.html">Configure Storage Nodes</a><ul>
@@ -92,6 +123,7 @@
 </ul>
 </li>
 </ul>
+</div>
 </div>
 </div>
 <div class="section" id="indices-and-tables">
@@ -111,13 +143,17 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="#">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Welcome to Nukestar&#8217;s documentation!</a></li>
+<li><a class="reference internal" href="#">Welcome to Nukestar&#8217;s documentation!</a><ul>
+<li><a class="reference internal" href="#users-guide">Users Guide</a></li>
+<li><a class="reference internal" href="#admin-guide">Admin Guide</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
 </ul>
 
   <h4>Next topic</h4>
-  <p class="topless"><a href="intro.html"
-                        title="next chapter">Introduction</a></p>
+  <p class="topless"><a href="users.html"
+                        title="next chapter">Remote Access</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -149,7 +185,7 @@
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="intro.html" title="Introduction"
+          <a href="users.html" title="Remote Access"
              >next</a> |</li>
         <li class="nav-item nav-item-0"><a href="#">Nukestar 0.1 documentation</a> &raquo;</li> 
       </ul>

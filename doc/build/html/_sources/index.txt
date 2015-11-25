@@ -6,7 +6,23 @@
 Welcome to Nukestar's documentation!
 ====================================
 
-Contents:
+.. image:: images/p52d.png
+	:width: 30%
+.. image:: images/3x3gtube_Q_2.png
+	:width: 30%
+.. image:: images/3x3gtube_R_2.png
+	:width: 30%
+
+Users Guide
+-----------
+
+.. toctree::
+   :glob:
+
+   users*
+
+Admin Guide
+-----------
 
 .. toctree::
    :glob:

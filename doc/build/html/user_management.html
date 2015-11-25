@@ -92,16 +92,25 @@ at all times.  If you want to add a user, group, or add a user to a particular g
     groups: mcnpx,mcnp6,origin,njoy,serpent,sudo
     shell: /bin/bash
     uid: 1014
+
 # List of groups.  Add or remove groups from the cluster here.
 cluster_groups:
-  - users
-  - sudo
-  - mcnpx
-  - mcnp6
-  - njoy
-  - serpent
-  - origin
-  - vera-admin
+  - name: vera-admin
+    gid:  2101
+  - name: mcnpx
+    gid:  2102
+  - name: mcnp6
+    gid:  2103
+  - name: origin
+    gid:  2104
+  - name: njoy
+    gid:  2105
+  - name: serpent
+    gid:  2106
+  - name: users
+    gid:  2100
+  - name: sudo
+    gid:  2000
 
 # dummy variable used for temp key storage
 keys_dir:  /root/nukecluster/roles/common/files
