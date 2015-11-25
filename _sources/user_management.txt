@@ -3,18 +3,20 @@ User and Group Management
 
 Cluster user permissions, ssh keys, and UID's/GID's must be managed in a very
 organized way to prevent any strange permissions or connections issues down the road.
-To facilitate easy user management, Ansible playbooks are provided in the repo.  Specifically,
+To facilitate easy user management, Ansible_ playbooks are provided in the repo.  Specifically,
 in the /roles/common directory.  The idea is to ensure UID's, groups, and ssh keys are consistant
 between the host OS and the chroot environment.
 
-Ansible can be installed by apt-get::
+Ansible_ can be installed by apt-get::
 
    #apt-get update && apt-get install ansible
 
-Ansible's only dependency is ssh.
+.. _Ansible: http://docs.ansible.com
+
+Ansible's only dependency is ssh.  Ansible is a radically simple IT automation engine that is well suited for configuration management and applicatoin deployment.
 
 The primary yml file used for user and group management is: ``roles/common/vars/main.yml``.  This file should be kept up to date
-at all times.  If you want to add a user, group, or add a user to a particular group then it is highly recommended to USE THIS FILE to do so.  As a bounous, it is easy to keep track of all the users and groups (rather than relying on unix commands, which could get burdensome if ~30 users with many groups are all floating around) on the system in one tidy file. It may be desirable to create a symlink to this file in an easily accessible path like::
+at all times.  If you want to add a user, group, or add a user to a particular group then it is highly recommended to USE THIS FILE to do so.  As a bounous, it is easy to keep track of all the users and groups (rather than relying on unix commands, which could get burdensome if ~30 users with many groups are all floating around) on the system in one tidy file. It is desirable to create a symlink to this file in an easily accessible path like::
 
     ln -s /home/root/nukecluster/roles/common/vars/main.yml /home/root/nukecluster/usr_settings.yml
 
@@ -70,21 +72,30 @@ This file contains user and group settings::
 
 .. Note::
 
-    This file is syntax sensitive.  Abide by yml syntax and mind whitespace.  Lists are comma seperated, no spaces
-    indentation must be perfect. spaces only.
+    This file is syntax sensitive.  Abide by yml syntax and mind whitespace.
+    Indentation must be perfect (use spaces only).
 
-When this user settings file is modified the next step is to run the usermod.yml playbood (idiomatically "usermod play") in the base directory of this repo::
+When this user settings file is modified the next step is to run the usermod.yml playbook (idiomatically "usermod play") in the base directory of this repo::
 
     #ansible-playbook usermod.yml
 
-By default, the usermod.yml top level script will run all user, group, and ssh commands required.  Note: you must be logged into the root account to run the usermod play.
+By default, the usermod.yml top level script will run all user, group, and ssh commands required.  
 
-Note on External SSH Keys
---------------------------
+.. Note:: 
+    You must be logged into the root account (or use sudo) to run the usermod play.
 
-By default, the usermod play looks for a ``foreign_keys`` file in the ``/home/<user>/.ssh/.`` folder of each user when run.  Keys in this file are appended to the ``authorized_keys`` file for that user.  This is done to try to keep externally generated keys seperate from internally generated keys.
+Adding New Users to Cluster
+---------------------------
 
-When a new user wants remote access to the cluster. 1) request an rsa public key from him.  2) add that rsa pub key to his ``/home/<his_username>/.ssh/foreign_keys`` file. 3) add his username (and groups, prefered shell & uid) to the users and groups settings file as shown above. 4) Run the usermod play.
+When a new user wants remote access to the cluster:
+
+1. Request a rsa public key from the prospective new user.
+2. Add that rsa pub key to his ``/home/<his_username>/.ssh/foreign_keys`` file. Create this file if it does not already exist.
+3. Add his username (and groups, prefered shell & uid) to the users and groups settings file (``usr_settings.yml``) as shown above.  Dont forget to assign the new user a unique UID.
+4. Run the usermod play.
+
+.. Note::
+	By default, the usermod play looks for a ``foreign_keys`` file in the ``/home/<user>/.ssh/.`` folder of each user when run.  Keys in this file are appended to the ``authorized_keys`` file for that user.  This is done to try to keep externally generated keys seperate from internally generated keys.
 
 Enabling Auto SSH Chroot on login
 ---------------------------------

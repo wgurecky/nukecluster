@@ -77,7 +77,7 @@
 </div>
 <div class="section" id="dealing-with-broken-pipes">
 <h2>Dealing with “broken pipes”<a class="headerlink" href="#dealing-with-broken-pipes" title="Permalink to this headline">¶</a></h2>
-<p>A SSH connection will not survive an extended network interuption due to intermittent connectivity (perhaps iffy wifi). You may recive the error message broken pipe if this occures. Worse, if you happened to be running, say, your awesome post-processing utility when this happens the program may terminate before it is done and you would have to start all over again. To avoid such a catastrophe, it is advisable to use screen or tmux to ensure you SSH session survives interuptions in your connection to nukestar.</p>
+<p>A SSH connection will not survive an extended network interuption due to intermittent connectivity (perhaps iffy wifi). You may recive the error message broken pipe if this occures. Worse, if you happened to be running, say, your awesome post-processing utility when this happens the program may terminate before it is done and you would have to start all over again. To avoid such a catastrophe, it is advisable to use screen or tmux to ensure your SSH session survives interuptions in your connection to nukestar.</p>
 <p>To use screen:</p>
 <div class="highlight-python"><div class="highlight"><pre>$screen -S &lt;session_name&gt;
 </pre></div>
@@ -200,7 +200,7 @@ setenv MPACT_DATA $VERA_INSTALL_BASE_DIR/share/Insilico/test_data
 </div>
 <div class="section" id="submitting-jobs">
 <h1>Submitting Jobs<a class="headerlink" href="#submitting-jobs" title="Permalink to this headline">¶</a></h1>
-<p>Large multi-core compute tasks (MPI or multi-threaded programs like MCNP, SERPENT, VERA ect...) can take advantage of the over 250+ cores avalible in the cluster. To ensure that the cores are being utilized efficiently and fairly (if many users want to start jobs at the same time) a job scheduler is present on the cluster. To submit multi-core jobs the user must first construct a PBS script. The PBS script contains info about the number of cores and number compute nodes to use for the calculation.</p>
+<p>Large multi-core compute tasks (MPI or multi-threaded programs like MCNP, SERPENT, VERA ect...) can take advantage of the over 210+ cores avalible in the cluster. To ensure that the cores are being utilized efficiently and fairly (if many users want to start jobs at the same time) a job scheduler is present on the cluster. To submit multi-core jobs the user must first construct a PBS script. The PBS script contains info about the number of cores and number compute nodes to use for the calculation.</p>
 <p>Small compute tasks can be executed on the head node without going through the extra step of constructing and submitting a PBS script. Examples of small tasks that do not need a PBS script include: A few NJOY runs, a simple single core post processing script, visualizing results, or compiling a small program.</p>
 <div class="section" id="pbs-scripts">
 <h2>PBS scripts<a class="headerlink" href="#pbs-scripts" title="Permalink to this headline">¶</a></h2>
@@ -289,20 +289,22 @@ The number of cores per node is given bellow:</p>
 </div>
 <div class="section" id="building-software">
 <h1>Building Software<a class="headerlink" href="#building-software" title="Permalink to this headline">¶</a></h1>
-<p>You can switch between system-wide accessible gcc and openmpi versions by first running <code class="docutils literal"><span class="pre">module</span> <span class="pre">avail</span></code> to check which are installed and then loading the desired version with <code class="docutils literal"><span class="pre">module</span> <span class="pre">load</span> <span class="pre">&lt;gcc-version&gt;</span></code>. If you need a specific version of gcc or some library you should be able to download the source to your home directory and build it there.</p>
+<p>You can switch between system-wide accessible gcc and openmpi versions by first running <code class="docutils literal"><span class="pre">module</span> <span class="pre">avail</span></code> to check which are installed and then loading the desired version with <code class="docutils literal"><span class="pre">module</span> <span class="pre">load</span> <span class="pre">&lt;gcc-version&gt;</span></code>. If you need a specific version of gcc or some library you should be able to download the source to your home directory and build it there.  The folowing gcc versions are currently availible:</p>
+<blockquote>
+<div><ul class="simple">
+<li>gcc-4.7.0</li>
+<li>gcc-4.8.4</li>
+<li>gcc-4.9.2 (default)</li>
+</ul>
+</div></blockquote>
+<p>All versions of the gnu compiler above were compiled with c, c++, and fortran support.  <code class="docutils literal"><span class="pre">gfortran</span></code> is the fortran compiler command, <code class="docutils literal"><span class="pre">gcc</span></code> is the C compiler, and <code class="docutils literal"><span class="pre">g++</span></code> is the C++ compiler command.</p>
 <p>You can check which version of gcc, or mpicc you are using with:</p>
-<div class="highlight-python"><div class="highlight"><pre>$which gcc
-$gcc --version
-$which mpicc
+<div class="highlight-python"><div class="highlight"><pre>$gcc --version
 $mpicc --version
 $mpiexec --version
 </pre></div>
 </div>
 <p>See the <a class="reference external" href="https://gcc.gnu.org/onlinedocs/">gcc</a>, <a class="reference external" href="https://www.gnu.org/software/make/manual/make.html">make</a>, and <a class="reference external" href="https://cmake.org/">cmake</a> documentation if you need help.</p>
-<p>If the program to be compiled is exceptionally large, requires large compile time, and can take advantage of parallel compiliation: up to 4 cores on the head node when compiling the program. Typically use the -j argument of make/cmake as follows to set the number of cores to be used when compiling:</p>
-<div class="highlight-python"><div class="highlight"><pre>make -j4 &lt;other args&gt;
-</pre></div>
-</div>
 </div>
 <div class="section" id="avalible-software">
 <h1>Avalible Software<a class="headerlink" href="#avalible-software" title="Permalink to this headline">¶</a></h1>
@@ -337,7 +339,7 @@ $mpiexec --version
 </li>
 <li><p class="first"><a class="reference external" href="http://www.openfoam.org">openFOAM</a>: General PDE c++ toolkit useful for CFD</p>
 </li>
-<li><p class="first">startCCM+: CFD software *(Limited License, ask system admins for acess)</p>
+<li><p class="first">starCCM+: CFD software *(Limited License, ask system admins for acess)</p>
 </li>
 <li><dl class="first docutils">
 <dt>Python3.4 and Packages:</dt>

@@ -33,7 +33,7 @@ It is recommended to use PuTTY_ (freely avalible) to generate a public/private k
 Dealing with “broken pipes”
 ---------------------------
 
-A SSH connection will not survive an extended network interuption due to intermittent connectivity (perhaps iffy wifi). You may recive the error message broken pipe if this occures. Worse, if you happened to be running, say, your awesome post-processing utility when this happens the program may terminate before it is done and you would have to start all over again. To avoid such a catastrophe, it is advisable to use screen or tmux to ensure you SSH session survives interuptions in your connection to nukestar.
+A SSH connection will not survive an extended network interuption due to intermittent connectivity (perhaps iffy wifi). You may recive the error message broken pipe if this occures. Worse, if you happened to be running, say, your awesome post-processing utility when this happens the program may terminate before it is done and you would have to start all over again. To avoid such a catastrophe, it is advisable to use screen or tmux to ensure your SSH session survives interuptions in your connection to nukestar.
 
 To use screen::
 
@@ -169,7 +169,7 @@ User generated env modules can be placed in ``/usr/share/modules/modulefiles/.``
 Submitting Jobs
 +++++++++++++++
 
-Large multi-core compute tasks (MPI or multi-threaded programs like MCNP, SERPENT, VERA ect...) can take advantage of the over 250+ cores avalible in the cluster. To ensure that the cores are being utilized efficiently and fairly (if many users want to start jobs at the same time) a job scheduler is present on the cluster. To submit multi-core jobs the user must first construct a PBS script. The PBS script contains info about the number of cores and number compute nodes to use for the calculation.
+Large multi-core compute tasks (MPI or multi-threaded programs like MCNP, SERPENT, VERA ect...) can take advantage of the over 210+ cores avalible in the cluster. To ensure that the cores are being utilized efficiently and fairly (if many users want to start jobs at the same time) a job scheduler is present on the cluster. To submit multi-core jobs the user must first construct a PBS script. The PBS script contains info about the number of cores and number compute nodes to use for the calculation.
 
 Small compute tasks can be executed on the head node without going through the extra step of constructing and submitting a PBS script. Examples of small tasks that do not need a PBS script include: A few NJOY runs, a simple single core post processing script, visualizing results, or compiling a small program.
 
@@ -263,13 +263,17 @@ The following PBS script submits an job to cluster utilizing 24 cores on node nu
 Building Software
 +++++++++++++++++
 
-You can switch between system-wide accessible gcc and openmpi versions by first running ``module avail`` to check which are installed and then loading the desired version with ``module load <gcc-version>``. If you need a specific version of gcc or some library you should be able to download the source to your home directory and build it there.
+You can switch between system-wide accessible gcc and openmpi versions by first running ``module avail`` to check which are installed and then loading the desired version with ``module load <gcc-version>``. If you need a specific version of gcc or some library you should be able to download the source to your home directory and build it there.  The folowing gcc versions are currently availible:
+
+    * gcc-4.7.0
+    * gcc-4.8.4
+    * gcc-4.9.2 (default)
+
+All versions of the gnu compiler above were compiled with c, c++, and fortran support.  ``gfortran`` is the fortran compiler command, ``gcc`` is the C compiler, and ``g++`` is the C++ compiler command.
 
 You can check which version of gcc, or mpicc you are using with::
 
-    $which gcc
     $gcc --version
-    $which mpicc
     $mpicc --version
     $mpiexec --version
 
@@ -279,9 +283,6 @@ See the gcc_, make_, and cmake_ documentation if you need help.
 .. _cmake: https://cmake.org/
 .. _make: https://www.gnu.org/software/make/manual/make.html
 
-If the program to be compiled is exceptionally large, requires large compile time, and can take advantage of parallel compiliation: up to 4 cores on the head node when compiling the program. Typically use the -j argument of make/cmake as follows to set the number of cores to be used when compiling::
-
-    make -j4 <other args>
 
 Avalible Software
 +++++++++++++++++
@@ -300,7 +301,7 @@ The following packages are already installed on Nukestar:
         - origen-arp:  simple burn-up and depletion (no gui)
         - KENOVI: Monte Carlo Neutron Transport
     * openFOAM_: General PDE c++ toolkit useful for CFD
-    * startCCM+: CFD software \*(Limited License, ask system admins for acess)
+    * starCCM+: CFD software \*(Limited License, ask system admins for acess)
     * Python3.4 and Packages:
         - Numpy_: Linear algebra library
         - Scipy_: Scientific and numerical routine library.

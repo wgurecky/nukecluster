@@ -25,7 +25,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="Nukestar 0.1 documentation" href="index.html" />
     <link rel="next" title="Base Software" href="software_setup.html" />
-    <link rel="prev" title="Configure Head Node" href="head_node.html" /> 
+    <link rel="prev" title="Head Node OS Install" href="head_node.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -38,7 +38,7 @@
           <a href="software_setup.html" title="Base Software"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="head_node.html" title="Configure Head Node"
+          <a href="head_node.html" title="Head Node OS Install"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Nukestar 0.1 documentation</a> &raquo;</li> 
       </ul>
@@ -53,16 +53,16 @@
 <h1>User and Group Management<a class="headerlink" href="#user-and-group-management" title="Permalink to this headline">¶</a></h1>
 <p>Cluster user permissions, ssh keys, and UID&#8217;s/GID&#8217;s must be managed in a very
 organized way to prevent any strange permissions or connections issues down the road.
-To facilitate easy user management, Ansible playbooks are provided in the repo.  Specifically,
+To facilitate easy user management, <a class="reference external" href="http://docs.ansible.com">Ansible</a> playbooks are provided in the repo.  Specifically,
 in the /roles/common directory.  The idea is to ensure UID&#8217;s, groups, and ssh keys are consistant
 between the host OS and the chroot environment.</p>
-<p>Ansible can be installed by apt-get:</p>
+<p><a class="reference external" href="http://docs.ansible.com">Ansible</a> can be installed by apt-get:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="c">#apt-get update &amp;&amp; apt-get install ansible</span>
 </pre></div>
 </div>
-<p>Ansible&#8217;s only dependency is ssh.</p>
+<p>Ansible&#8217;s only dependency is ssh.  Ansible is a radically simple IT automation engine that is well suited for configuration management and applicatoin deployment.</p>
 <p>The primary yml file used for user and group management is: <code class="docutils literal"><span class="pre">roles/common/vars/main.yml</span></code>.  This file should be kept up to date
-at all times.  If you want to add a user, group, or add a user to a particular group then it is highly recommended to USE THIS FILE to do so.  As a bounous, it is easy to keep track of all the users and groups (rather than relying on unix commands, which could get burdensome if ~30 users with many groups are all floating around) on the system in one tidy file. It may be desirable to create a symlink to this file in an easily accessible path like:</p>
+at all times.  If you want to add a user, group, or add a user to a particular group then it is highly recommended to USE THIS FILE to do so.  As a bounous, it is easy to keep track of all the users and groups (rather than relying on unix commands, which could get burdensome if ~30 users with many groups are all floating around) on the system in one tidy file. It is desirable to create a symlink to this file in an easily accessible path like:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">ln</span> <span class="o">-</span><span class="n">s</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">root</span><span class="o">/</span><span class="n">nukecluster</span><span class="o">/</span><span class="n">roles</span><span class="o">/</span><span class="n">common</span><span class="o">/</span><span class="nb">vars</span><span class="o">/</span><span class="n">main</span><span class="o">.</span><span class="n">yml</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">root</span><span class="o">/</span><span class="n">nukecluster</span><span class="o">/</span><span class="n">usr_settings</span><span class="o">.</span><span class="n">yml</span>
 </pre></div>
 </div>
@@ -118,18 +118,31 @@ keys_dir:  /root/nukecluster/roles/common/files
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">This file is syntax sensitive.  Abide by yml syntax and mind whitespace.  Lists are comma seperated, no spaces
-indentation must be perfect. spaces only.</p>
+<p class="last">This file is syntax sensitive.  Abide by yml syntax and mind whitespace.
+Indentation must be perfect (use spaces only).</p>
 </div>
-<p>When this user settings file is modified the next step is to run the usermod.yml playbood (idiomatically &#8220;usermod play&#8221;) in the base directory of this repo:</p>
+<p>When this user settings file is modified the next step is to run the usermod.yml playbook (idiomatically &#8220;usermod play&#8221;) in the base directory of this repo:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="c">#ansible-playbook usermod.yml</span>
 </pre></div>
 </div>
-<p>By default, the usermod.yml top level script will run all user, group, and ssh commands required.  Note: you must be logged into the root account to run the usermod play.</p>
-<div class="section" id="note-on-external-ssh-keys">
-<h2>Note on External SSH Keys<a class="headerlink" href="#note-on-external-ssh-keys" title="Permalink to this headline">¶</a></h2>
-<p>By default, the usermod play looks for a <code class="docutils literal"><span class="pre">foreign_keys</span></code> file in the <code class="docutils literal"><span class="pre">/home/&lt;user&gt;/.ssh/.</span></code> folder of each user when run.  Keys in this file are appended to the <code class="docutils literal"><span class="pre">authorized_keys</span></code> file for that user.  This is done to try to keep externally generated keys seperate from internally generated keys.</p>
-<p>When a new user wants remote access to the cluster. 1) request an rsa public key from him.  2) add that rsa pub key to his <code class="docutils literal"><span class="pre">/home/&lt;his_username&gt;/.ssh/foreign_keys</span></code> file. 3) add his username (and groups, prefered shell &amp; uid) to the users and groups settings file as shown above. 4) Run the usermod play.</p>
+<p>By default, the usermod.yml top level script will run all user, group, and ssh commands required.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You must be logged into the root account (or use sudo) to run the usermod play.</p>
+</div>
+<div class="section" id="adding-new-users-to-cluster">
+<h2>Adding New Users to Cluster<a class="headerlink" href="#adding-new-users-to-cluster" title="Permalink to this headline">¶</a></h2>
+<p>When a new user wants remote access to the cluster:</p>
+<ol class="arabic simple">
+<li>Request a rsa public key from the prospective new user.</li>
+<li>Add that rsa pub key to his <code class="docutils literal"><span class="pre">/home/&lt;his_username&gt;/.ssh/foreign_keys</span></code> file. Create this file if it does not already exist.</li>
+<li>Add his username (and groups, prefered shell &amp; uid) to the users and groups settings file (<code class="docutils literal"><span class="pre">usr_settings.yml</span></code>) as shown above.  Dont forget to assign the new user a unique UID.</li>
+<li>Run the usermod play.</li>
+</ol>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">By default, the usermod play looks for a <code class="docutils literal"><span class="pre">foreign_keys</span></code> file in the <code class="docutils literal"><span class="pre">/home/&lt;user&gt;/.ssh/.</span></code> folder of each user when run.  Keys in this file are appended to the <code class="docutils literal"><span class="pre">authorized_keys</span></code> file for that user.  This is done to try to keep externally generated keys seperate from internally generated keys.</p>
+</div>
 </div>
 <div class="section" id="enabling-auto-ssh-chroot-on-login">
 <h2>Enabling Auto SSH Chroot on login<a class="headerlink" href="#enabling-auto-ssh-chroot-on-login" title="Permalink to this headline">¶</a></h2>
@@ -160,7 +173,7 @@ way to break out of the chroot once you are placed inside by sshd.</p>
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">User and Group Management</a><ul>
-<li><a class="reference internal" href="#note-on-external-ssh-keys">Note on External SSH Keys</a></li>
+<li><a class="reference internal" href="#adding-new-users-to-cluster">Adding New Users to Cluster</a></li>
 <li><a class="reference internal" href="#enabling-auto-ssh-chroot-on-login">Enabling Auto SSH Chroot on login</a></li>
 </ul>
 </li>
@@ -168,7 +181,7 @@ way to break out of the chroot once you are placed inside by sshd.</p>
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="head_node.html"
-                        title="previous chapter">Configure Head Node</a></p>
+                        title="previous chapter">Head Node OS Install</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="software_setup.html"
                         title="next chapter">Base Software</a></p>
@@ -206,7 +219,7 @@ way to break out of the chroot once you are placed inside by sshd.</p>
           <a href="software_setup.html" title="Base Software"
              >next</a> |</li>
         <li class="right" >
-          <a href="head_node.html" title="Configure Head Node"
+          <a href="head_node.html" title="Head Node OS Install"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Nukestar 0.1 documentation</a> &raquo;</li> 
       </ul>

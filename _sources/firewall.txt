@@ -1,6 +1,10 @@
 Configuring The Firewall/Router
 ++++++++++++++++++++++++++++++++
 
+PfSense_ can be Downloaded from www.pfsense.org.  Their install guide is very helpful, therefor detailed installation instructions will not be provided here.
+
+.. _PfSense: https://www.pfsense.org
+
 Configure the WAN and LAN interfaces during the initial install procedure.
 Ensure a DHCP server is running on the LAN interface.  The internal network should be
 setup assign IPs by default on 192.168.1.xxx/255.255.255.0 subnet.  The default IP of the LAN interface
@@ -42,5 +46,5 @@ Other Software
 The default install of PfSense is quite secure.  The default firewall rules (+ the NAT rule) will work for most situations.  
 Many packages are available that improve the monitoring capabilities of PfSense.  The admin should consider installing
 PFblocker and Snort.  PFblocker allows the admin to easily block IPs from specific countries.  It is recommended to block all of
-Africa, Asia + Russia, and South America.  Snort is an intrusion detection package.  You can download "rules" from <website here>
+Africa, Asia + Russia, and South America.  Snort is an intrusion detection package.  You can download "rules" from www.emergingthreats.net
 to filter and log specific traffic.

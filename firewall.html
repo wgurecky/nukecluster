@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="Nukestar 0.1 documentation" href="index.html" />
-    <link rel="next" title="Configure Head Node" href="head_node.html" />
+    <link rel="next" title="Head Node OS Install" href="head_node.html" />
     <link rel="prev" title="Setup and Install" href="setup.html" /> 
   </head>
   <body role="document">
@@ -35,7 +35,7 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="head_node.html" title="Configure Head Node"
+          <a href="head_node.html" title="Head Node OS Install"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="setup.html" title="Setup and Install"
@@ -51,6 +51,7 @@
             
   <div class="section" id="configuring-the-firewall-router">
 <h1>Configuring The Firewall/Router<a class="headerlink" href="#configuring-the-firewall-router" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://www.pfsense.org">PfSense</a> can be Downloaded from www.pfsense.org.  Their install guide is very helpful, therefor detailed installation instructions will not be provided here.</p>
 <p>Configure the WAN and LAN interfaces during the initial install procedure.
 Ensure a DHCP server is running on the LAN interface.  The internal network should be
 setup assign IPs by default on 192.168.1.xxx/255.255.255.0 subnet.  The default IP of the LAN interface
@@ -87,7 +88,7 @@ For the server address put the head node&#8217;s IP address <code class="docutil
 <p>The default install of PfSense is quite secure.  The default firewall rules (+ the NAT rule) will work for most situations.
 Many packages are available that improve the monitoring capabilities of PfSense.  The admin should consider installing
 PFblocker and Snort.  PFblocker allows the admin to easily block IPs from specific countries.  It is recommended to block all of
-Africa, Asia + Russia, and South America.  Snort is an intrusion detection package.  You can download &#8220;rules&#8221; from &lt;website here&gt;
+Africa, Asia + Russia, and South America.  Snort is an intrusion detection package.  You can download &#8220;rules&#8221; from www.emergingthreats.net
 to filter and log specific traffic.</p>
 </div>
 </div>
@@ -113,7 +114,7 @@ to filter and log specific traffic.</p>
                         title="previous chapter">Setup and Install</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="head_node.html"
-                        title="next chapter">Configure Head Node</a></p>
+                        title="next chapter">Head Node OS Install</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -145,7 +146,7 @@ to filter and log specific traffic.</p>
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="head_node.html" title="Configure Head Node"
+          <a href="head_node.html" title="Head Node OS Install"
              >next</a> |</li>
         <li class="right" >
           <a href="setup.html" title="Setup and Install"
