@@ -84,14 +84,10 @@
 <li class="toctree-l1"><a class="reference internal" href="setup.html">Setup and Install</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="setup.html#firewall-router">Firewall/Router</a></li>
 <li class="toctree-l2"><a class="reference internal" href="setup.html#head-node">Head Node</a></li>
-<li class="toctree-l2"><a class="reference internal" href="setup.html#storage-nodes-optional">Storage Nodes (OPTIONAL)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="setup.html#compute-nodes">Compute Nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="setup.html#storage-nodes-optional">Storage Nodes (OPTIONAL)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="setup.html#other">Other</a></li>
-<li class="toctree-l2"><a class="reference internal" href="setup.html#aprox-maximum-hardware-cost">Aprox Maximum Hardware Cost</a></li>
-<li class="toctree-l2"><a class="reference internal" href="setup.html#operating-system">Operating System</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="setup.html#os-install">OS Install</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="setup.html#os-installs">OS Installs</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="firewall.html">Configuring The Firewall/Router</a><ul>
@@ -100,26 +96,34 @@
 <li class="toctree-l2"><a class="reference internal" href="firewall.html#other-software">Other Software</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="head_node.html">Configure Head Node</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="head_node.html">Head Node OS Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="head_node.html#configure-head-node">Configure Head Node</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="head_node.html#setup-chroot">Setup Chroot</a></li>
 <li class="toctree-l2"><a class="reference internal" href="head_node.html#configure-chroot">Configure Chroot</a></li>
 <li class="toctree-l2"><a class="reference internal" href="head_node.html#tftp-and-pxe-boot-setup">TFTP and PXE boot Setup</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="user_management.html">User and Group Management</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="user_management.html#note-on-external-ssh-keys">Note on External SSH Keys</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_management.html#adding-new-users-to-cluster">Adding New Users to Cluster</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user_management.html#enabling-auto-ssh-chroot-on-login">Enabling Auto SSH Chroot on login</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="software_setup.html">Base Software</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="software_setup.html#base-os-software">Base OS software</a></li>
-<li class="toctree-l2"><a class="reference internal" href="software_setup.html#chroot-compute-node-software">Chroot / Compute Node Software</a></li>
-<li class="toctree-l2"><a class="reference internal" href="software_setup.html#torque-maui-systemd-scripts">TORQUE / MAUI systemd scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="software_setup.html#torque-maui">Torque + Maui</a></li>
+<li class="toctree-l2"><a class="reference internal" href="software_setup.html#configure-torque">Configure Torque</a></li>
+<li class="toctree-l2"><a class="reference internal" href="software_setup.html#configure-maui">Configure Maui</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="software_setup.html#chroot-compute-node-software">Chroot / Compute Node Software</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="software_setup.html#install-pbs-mom-in-compute-os">Install PBS_MOM in Compute OS</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="software_setup.html#torque-maui-systemd-scripts">TORQUE / MAUI systemd scripts</a></li>
 <li class="toctree-l1"><a class="reference internal" href="storage_node.html">Configure Storage Nodes</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="storage_node.html#setup-raid-on-each-storage-node">Setup RAID on Each Storage Node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="storage_node.html#setup-glusterfs-on-each-storage-node">Setup GlusterFS on Each Storage Node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="storage_node.html#export-glusterfs-as-nfs-share">Export GlusterFS as NFS share</a></li>
 </ul>
 </li>
 </ul>

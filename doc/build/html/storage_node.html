@@ -47,13 +47,14 @@
             
   <div class="section" id="configure-storage-nodes">
 <h1>Configure Storage Nodes<a class="headerlink" href="#configure-storage-nodes" title="Permalink to this headline">¶</a></h1>
-<p>Configuring cluster storage precedes configuing the head node or the
-compute nodes.</p>
-<p>Here we will assume the storage node(s) have 2 drives available for both a
-home and a root glusterFS brick.</p>
+<p>If seperate storage are desired; configuring cluster storage precedes configuing the head node or the
+compute nodes.  This storage node configuratin guide assumes that the storage nodes already have a
+clean Debian installation on them.</p>
+<p>Here we will assume we have 4 storage nodes and each node has 1 drive dedicated to the OS install and 2 drives available for both a
+home and a root glusterFS brick (5 drives total).  Of course, depending on hardware the final setup may change.</p>
 <div class="section" id="setup-raid-on-each-storage-node">
 <h2>Setup RAID on Each Storage Node<a class="headerlink" href="#setup-raid-on-each-storage-node" title="Permalink to this headline">¶</a></h2>
-<p>create a single partition on disks</p>
+<p>create a single empty primary partition the target glusterFS disks</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">fdisk</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">sdb</span>
 <span class="n">fdisk</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">sdc</span>
 <span class="n">fdisk</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">sdd</span>
@@ -65,7 +66,7 @@ home and a root glusterFS brick.</p>
 <span class="n">mdadm</span> <span class="o">--</span><span class="n">create</span> <span class="o">--</span><span class="n">verbose</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">md1</span> <span class="o">--</span><span class="n">level</span><span class="o">=</span><span class="n">mirror</span> <span class="o">--</span><span class="n">raid</span><span class="o">-</span><span class="n">devices</span><span class="o">=</span><span class="mi">2</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">sdd1</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">sde1</span>
 </pre></div>
 </div>
-<p>create filesystem(s)</p>
+<p>create ext4 filesystem(s)</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">mkfs</span><span class="o">.</span><span class="n">ext4</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">md0</span>
 <span class="n">mkfs</span><span class="o">.</span><span class="n">ext4</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">md1</span>
 </pre></div>
@@ -85,7 +86,7 @@ home and a root glusterFS brick.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">mount</span> <span class="o">-</span><span class="n">a</span>
 </pre></div>
 </div>
-<p>Ensure that <code class="docutils literal"><span class="pre">/etc/hosts</span></code> contains hostnames and IPs of other storage nodes.</p>
+<p>Ensure that <code class="docutils literal"><span class="pre">/etc/hosts</span></code> contains hostnames and IPs of other storage and compute nodes.</p>
 </div>
 <div class="section" id="setup-glusterfs-on-each-storage-node">
 <h2>Setup GlusterFS on Each Storage Node<a class="headerlink" href="#setup-glusterfs-on-each-storage-node" title="Permalink to this headline">¶</a></h2>
@@ -98,7 +99,7 @@ apt-get install glusterfs-server
 </pre></div>
 </div>
 <p>Configure glusterFS:</p>
-<div class="highlight-python"><div class="highlight"><pre>gluster peer probe (hostnames of OTHER storage nodes)
+<div class="highlight-python"><div class="highlight"><pre>gluster peer probe &lt;hostnames of OTHER storage nodes&gt;
 </pre></div>
 </div>
 <p>When the above tasks have been completed on ALL storage nodes run:</p>
@@ -114,6 +115,10 @@ gluster volume start nukehome
 </pre></div>
 </div>
 </div>
+<div class="section" id="export-glusterfs-as-nfs-share">
+<h2>Export GlusterFS as NFS share<a class="headerlink" href="#export-glusterfs-as-nfs-share" title="Permalink to this headline">¶</a></h2>
+<p>See documentation at www.gluster.org</p>
+</div>
 </div>
 
 
@@ -127,6 +132,7 @@ gluster volume start nukehome
 <li><a class="reference internal" href="#">Configure Storage Nodes</a><ul>
 <li><a class="reference internal" href="#setup-raid-on-each-storage-node">Setup RAID on Each Storage Node</a></li>
 <li><a class="reference internal" href="#setup-glusterfs-on-each-storage-node">Setup GlusterFS on Each Storage Node</a></li>
+<li><a class="reference internal" href="#export-glusterfs-as-nfs-share">Export GlusterFS as NFS share</a></li>
 </ul>
 </li>
 </ul>
