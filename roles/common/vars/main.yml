@@ -49,6 +49,11 @@ ssh_users:
     shell: /bin/bash
     uid: 1016
 
+  - name: wwilson
+    groups: users,mcnpx,mcnp6,njoy,serpent,origin
+    shell: /bin/bash
+    uid: 1017
+
 # List of groups.  Add or remove groups from the cluster here.
 cluster_groups: 
   - name: vera-admin
