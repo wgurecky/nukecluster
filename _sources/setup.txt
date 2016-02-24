@@ -1,20 +1,20 @@
 Setup and Install
 =================
 
-The pourpose of each machine in the cluster is provided below:
+The purpose of each machine in the cluster is provided below:
 
 Firewall/Router
 +++++++++++++++
 
 Purpose:
-  * Runs DHCP server, assigns IP adresses to all nodes in the cluster on the local subnet
-  * Routes incomming SSH traffic to port 22 on the head node (NAT)
+  * Runs DHCP server, assigns IP addresses to all nodes in the cluster on the local subnet
+  * Routes incoming SSH traffic to port 22 on the head node (NAT)
   * Limits the attack surface of the cluster to just ONE open port
   * Obscures the presence of the cluster on the net (inhibit, but not prevent portscans)
   * Logs traffic information
 
 Firewall hardware requirements:
-  * 2 port 1 Gbit/sec NIC (intel prefered)
+  * 2 port 1 Gbit/sec NIC (intel preferred)
   * Modest CPU  (2 core 2GHZ+)
   * Atleast 1 GB RAM
 
@@ -69,7 +69,7 @@ Storage node hardware:
 Other
 +++++
 Network Switches:
-  * at the time of this writting, dont know if ethernet or infiniband
+  * at the time of this writing, dont know if ethernet or infiniband
   * provides interconnectivity between all nodes in cluster
   * Should be atleast 1Gbit/sec 
 
@@ -83,7 +83,7 @@ past experience.
 .. _Debian: http://www.debian.org
 
 PfSense_ was chosen as a firewall OS since it is easy to configure and install.  In addition there are many
-packages availible for PfSense that increase it's utility and security.
+packages available for PfSense that increase it's utility and security.
 
 .. _PfSense: https://www.pfsense.org
 

@@ -105,7 +105,9 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="user_management.html">User and Group Management</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="user_management.html#adding-new-users-to-cluster">Adding New Users to Cluster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_management.html#manipulating-groups-and-permissions">Manipulating Groups and Permissions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user_management.html#enabling-auto-ssh-chroot-on-login">Enabling Auto SSH Chroot on login</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_management.html#securing-sshd">Securing sshd</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="software_setup.html">Base Software</a><ul>
@@ -116,10 +118,26 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="software_setup.html#chroot-compute-node-software">Chroot / Compute Node Software</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="software_setup.html#environment-modules">Environment Modules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="software_setup.html#install-pbs-mom-in-compute-os">Install PBS_MOM in Compute OS</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="software_setup.html#torque-maui-systemd-scripts">TORQUE / MAUI systemd scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="software_setup.html#torque-maui-systemd-scripts">TORQUE / MAUI systemd scripts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="software_setup.html#head-node">Head Node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="software_setup.html#compute-nodes-chroot">Compute Nodes / chroot</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="maintenance.html">Hardware Maintainance Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="maintenance.html#head-node-hard-drive-replacement">Head Node Hard Drive Replacement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="maintenance.html#rebooting-a-compute-node">Rebooting a Compute Node</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="maintenance.html#backup-backup-backup">Backup Backup Backup</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="maintenance.html#cron-job">Cron Job</a></li>
+<li class="toctree-l2"><a class="reference internal" href="maintenance.html#encrypting-a-device">Encrypting a Device</a></li>
+<li class="toctree-l2"><a class="reference internal" href="maintenance.html#creating-a-root-keyfile">Creating a root keyfile</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="storage_node.html">Configure Storage Nodes</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="storage_node.html#setup-raid-on-each-storage-node">Setup RAID on Each Storage Node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="storage_node.html#setup-glusterfs-on-each-storage-node">Setup GlusterFS on Each Storage Node</a></li>
@@ -196,7 +214,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2014, william gurecky.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
     </div>
   </body>
 </html>

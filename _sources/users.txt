@@ -26,14 +26,14 @@ Your new keys will be placed in ``~/.ssh/.`` on your machine. Keep the private k
 Windows Clients
 ---------------
 
-It is recommended to use PuTTY_ (freely avalible) to generate a public/private key pair. email the public key to a system administrator.
+It is recommended to use PuTTY_ (freely available) to generate a public/private key pair. email the public key to a system administrator.
 
 .. _PuTTY: http://www.putty.org/
 
 Dealing with “broken pipes”
 ---------------------------
 
-A SSH connection will not survive an extended network interuption due to intermittent connectivity (perhaps iffy wifi). You may recive the error message broken pipe if this occures. Worse, if you happened to be running, say, your awesome post-processing utility when this happens the program may terminate before it is done and you would have to start all over again. To avoid such a catastrophe, it is advisable to use screen or tmux to ensure your SSH session survives interuptions in your connection to nukestar.
+A SSH connection will not survive an extended network interruption due to intermittent connectivity (perhaps iffy wifi). You may receive the error message broken pipe if this occurs. Worse, if you happened to be running, say, your awesome post-processing utility when this happens the program may terminate before it is done and you would have to start all over again. To avoid such a catastrophe, it is advisable to use screen or tmux to ensure your SSH session survives interruptions in your connection to nukestar.
 
 To use screen::
 
@@ -41,20 +41,20 @@ To use screen::
 
 It is a good idea to do the above fist-thing when connecting to nukestar.
 
-pressing ``ctrl+a, d`` detatches from the current session.
+Pressing ``ctrl+a, d`` detaches from the current session.
 
 You can recover a screen session by first listing your running sessions::
 
     $screen -list
 
-And re-attaching to the desired sessoin with::
+And re-attaching to the desired session with::
 
     $screen -R <session_name>
 
 Data transfer to/from Nukestar
 ------------------------------
 
-Transfering data to and from nukestar can be done with a utility called scp_ (secure copy protocall). You will need to install scp on your local machine if you want to use it. There are alternatives: Filezilla_ is a GUI program that can proform the same function as scp.
+Transferring data to and from nukestar can be done with a utility called scp_ (secure copy protocol). You will need to install scp on your local machine if you want to use it. There are alternatives: Filezilla_ is a GUI program that can preform the same function as scp.
 
 .. _scp: http://linux.die.net/man/1/scp
 .. _Filezilla: http://filezilla-project.org
@@ -71,7 +71,7 @@ To pull/push and entire folder you need to use the -r flag::
 
     $scp -r <username>@nukestar.me.utexas.edu:<source_folder> <destination_folder>
 
-If transfering many small data or text files it may be much faster to use a utility called rsync_ (which should be avalible on any linux or OSX install. An example syntax for pulling an entire folder from nukestar to your local machine using rsync is given bellow::
+If transferring many small data or text files it may be much faster to use a utility called rsync_ (which should be available on any linux or OSX install. An example syntax for pulling an entire folder from nukestar to your local machine using rsync is given bellow::
 
     $rsync -avze ssh <user_name>@nukestar.me.utexas.edu:~/path/to/data  <destination_path> --progress
 
@@ -80,7 +80,7 @@ If transfering many small data or text files it may be much faster to use a util
 Visualizing Results
 -------------------
 
-To use a GUI program through an SSH connection (such as MCNP’s plotter) you need to enable Xforwarding on your SSH session. When connecting to nukestar with SSH add an aditional argument as follows::
+To use a GUI program through an SSH connection (such as MCNP’s plotter) you need to enable Xforwarding on your SSH session. When connecting to nukestar with SSH add an additional argument as follows::
 
     $ssh -X <user_name>@nukestar.me.utexas.edu
 
@@ -94,9 +94,9 @@ Having many versions of gcc, cmake, openmpi ect installed and switching between 
 
 The Environment Modules package allows the user to manipulate environment variables.
 
-A user can create new modules and place them in /usr/share/modules/modulefiles/.
+A user can create new modules and place them in ``/usr/share/modules/modulefiles/``.
 
-A list of currently avalible modules is given by::
+A list of currently available modules is given by::
 
     $module avail
 
@@ -169,7 +169,7 @@ User generated env modules can be placed in ``/usr/share/modules/modulefiles/.``
 Submitting Jobs
 +++++++++++++++
 
-Large multi-core compute tasks (MPI or multi-threaded programs like MCNP, SERPENT, VERA ect...) can take advantage of the over 210+ cores avalible in the cluster. To ensure that the cores are being utilized efficiently and fairly (if many users want to start jobs at the same time) a job scheduler is present on the cluster. To submit multi-core jobs the user must first construct a PBS script. The PBS script contains info about the number of cores and number compute nodes to use for the calculation.
+Large multi-core compute tasks (MPI or multi-threaded programs like MCNP, SERPENT, VERA ect...) can take advantage of the over 210+ cores available in the cluster. To ensure that the cores are being utilized efficiently and fairly (if many users want to start jobs at the same time) a job scheduler is present on the cluster. To submit multi-core jobs the user must first construct a PBS script. The PBS script contains info about the number of cores and number compute nodes to use for the calculation.
 
 Small compute tasks can be executed on the head node without going through the extra step of constructing and submitting a PBS script. Examples of small tasks that do not need a PBS script include: A few NJOY runs, a simple single core post processing script, visualizing results, or compiling a small program.
 
@@ -197,7 +197,7 @@ To kill a job, first identify the ID of the job you want to kill with ``qstat`` 
 
     $qdel <jobID>
 
-Documentation for writing PBS scripts can be found on the the AdaptiveComputing_ website.
+Documentation for writing PBS scripts can be found on the AdaptiveComputing_ website.
 
 .. _AdaptiveComputing: http://docs.adaptivecomputing.com/torque/4-0-2/Content/topics/commands/qsub.htm
 
@@ -258,12 +258,44 @@ The following PBS script submits an job to cluster utilizing 24 cores on node nu
        - nukestar05:  64
        - nukestar06:  64
     If you request more cores than a node has you job will hang in the queue indefinately.
+
+To execute an MCNP job on 120 cores, for example, use the following PBS settings block::
+
+    #!/bin/bash
+    ### PBS Settings
+    #PBS -S /bin/bash
+    #PBS -N test_case
+    #PBS -l nodes=120
+    #PBS -q day
+    #PBS -j oe
+    #PBS -V
+
+Though the ``nodes=120`` syntax may be misleading, this will execute a job on 120 cores on any
+avalible cores in the cluster.  
+
+.. Note::
+
+    WARNING: this may hurt performance! More cores does not equal more performance!
+    Nukestar uses 1GBit ethernet for inter-node communications which is SLOW and has a
+    very small bandwidth compared to on-node communications.  It is highly recommended to
+    fit your jobs onto ONE node (eg. use a max of 64 cores unless you have a very good
+    reason to run with more).
+
+There are 2GB of ram per core on nukestar.  To run jobs which require >2GB ram / core
+simply request more process memory using the ``pmem=``  PBS setting in the PBS block::
+
+    #PBS -l pmem=4GB
+
+.. Note::
+
+    Be aware this limits the number of cores you can consume.  On a 64 core node, for example,
+    only 32 of 64 cores will be avalible for the job if you run with 4GB per process.
  
 
 Building Software
 +++++++++++++++++
 
-You can switch between system-wide accessible gcc and openmpi versions by first running ``module avail`` to check which are installed and then loading the desired version with ``module load <gcc-version>``. If you need a specific version of gcc or some library you should be able to download the source to your home directory and build it there.  The folowing gcc versions are currently availible:
+You can switch between system-wide accessible gcc and openmpi versions by first running ``module avail`` to check which are installed and then loading the desired version with ``module load <gcc-version>``. If you need a specific version of gcc or some library you should be able to download the source to your home directory and build it there.  The following gcc versions are currently available:
 
     * gcc-4.7.0
     * gcc-4.8.4
@@ -277,7 +309,7 @@ You can check which version of gcc, or mpicc you are using with::
     $mpicc --version
     $mpiexec --version
 
-See the gcc_, make_, and cmake_ documentation if you need help.
+See the gcc_, make_, and cmake_ documentation if you need help compiling software.
 
 .. _gcc: https://gcc.gnu.org/onlinedocs/
 .. _cmake: https://cmake.org/
@@ -301,7 +333,7 @@ The following packages are already installed on Nukestar:
         - origen-arp:  simple burn-up and depletion (no gui)
         - KENOVI: Monte Carlo Neutron Transport
     * openFOAM_: General PDE c++ toolkit useful for CFD
-    * starCCM+: CFD software \*(Limited License, ask system admins for acess)
+    * starCCM+: CFD software \*(Limited License, ask system admins for access)
     * Python3.4 and Packages:
         - Numpy_: Linear algebra library
         - Scipy_: Scientific and numerical routine library.

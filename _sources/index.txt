@@ -33,6 +33,7 @@ Admin Guide
    head_node*
    user_management*
    software_setup*
+   maintenance*
    storage_node*
 
 

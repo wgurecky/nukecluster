@@ -54,66 +54,72 @@
 <p>Cluster user permissions, ssh keys, and UID&#8217;s/GID&#8217;s must be managed in a very
 organized way to prevent any strange permissions or connections issues down the road.
 To facilitate easy user management, <a class="reference external" href="http://docs.ansible.com">Ansible</a> playbooks are provided in the repo.  Specifically,
-in the /roles/common directory.  The idea is to ensure UID&#8217;s, groups, and ssh keys are consistant
+in the /roles/common directory.  The idea is to ensure UID&#8217;s, groups, and ssh keys are consistent
 between the host OS and the chroot environment.</p>
 <p><a class="reference external" href="http://docs.ansible.com">Ansible</a> can be installed by apt-get:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c">#apt-get update &amp;&amp; apt-get install ansible</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#apt-get update &amp;&amp; apt-get install ansible</span>
 </pre></div>
 </div>
-<p>Ansible&#8217;s only dependency is ssh.  Ansible is a radically simple IT automation engine that is well suited for configuration management and applicatoin deployment.</p>
+<p>Ansible&#8217;s only dependency is ssh.  Ansible is a radically simple IT automation engine that is well suited for configuration management and application deployment.</p>
+<p>Ansible scripts included with this repository should be in <code class="docutils literal"><span class="pre">/root/nukecluster</span></code>.
+From a fresh install the usermod play can be obtained via git:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#cd /root</span>
+<span class="c1">#git clone https://github.com/wgurecky/nukecluster.git</span>
+</pre></div>
+</div>
 <p>The primary yml file used for user and group management is: <code class="docutils literal"><span class="pre">roles/common/vars/main.yml</span></code>.  This file should be kept up to date
-at all times.  If you want to add a user, group, or add a user to a particular group then it is highly recommended to USE THIS FILE to do so.  As a bounous, it is easy to keep track of all the users and groups (rather than relying on unix commands, which could get burdensome if ~30 users with many groups are all floating around) on the system in one tidy file. It is desirable to create a symlink to this file in an easily accessible path like:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">ln</span> <span class="o">-</span><span class="n">s</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">root</span><span class="o">/</span><span class="n">nukecluster</span><span class="o">/</span><span class="n">roles</span><span class="o">/</span><span class="n">common</span><span class="o">/</span><span class="nb">vars</span><span class="o">/</span><span class="n">main</span><span class="o">.</span><span class="n">yml</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">root</span><span class="o">/</span><span class="n">nukecluster</span><span class="o">/</span><span class="n">usr_settings</span><span class="o">.</span><span class="n">yml</span>
+at all times.  If you want to add a user, group, or add a user to a particular group then it is highly recommended to USE THIS FILE to do so.  As a bonus, it is easy to keep track of all the users and groups (rather than relying on unix commands, which could get burdensome if ~30 users with many groups are all floating around) on the system in one tidy file. It is desirable to create a symlink to this file in an easily accessible path like:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#ln -s /root/nukecluster/roles/common/vars/main.yml /root/nukecluster/usr_settings.yml</span>
 </pre></div>
 </div>
-<p>This file contains user and group settings:</p>
-<div class="highlight-python"><div class="highlight"><pre>ssh_users:
-  - name: wlg333
-    groups: users,mcnpx,vera-admin,mcnp6,njoy,serpent,origin,sudo
-    shell: /bin/bash
-    uid: 1010
+<p>This file contains user and group settings :</p>
+<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">ssh_users</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">wlg333</span>
+    <span class="l l-Scalar l-Scalar-Plain">groups</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">users,mcnpx,vera-admin,mcnp6,njoy,serpent,origin,sudo</span>
+    <span class="l l-Scalar l-Scalar-Plain">shell</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">/bin/bash</span>
+    <span class="l l-Scalar l-Scalar-Plain">uid</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">1010</span>
 
-  - name: armstru
-    groups: users,mcnpx
-    shell: /bin/bash
-    uid: 1011
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">armstru</span>
+    <span class="l l-Scalar l-Scalar-Plain">groups</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">users,mcnpx</span>
+    <span class="l l-Scalar l-Scalar-Plain">shell</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">/bin/bash</span>
+    <span class="l l-Scalar l-Scalar-Plain">uid</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">1011</span>
 
-  - name: dbz473
-    groups: users
-    shell: /bin/bash
-    uid: 1012
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">dbz473</span>
+    <span class="l l-Scalar l-Scalar-Plain">groups</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">users</span>
+    <span class="l l-Scalar l-Scalar-Plain">shell</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">/bin/bash</span>
+    <span class="l l-Scalar l-Scalar-Plain">uid</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">1012</span>
 
-  - name: rf8465
-    groups: users,mcnpx,mcnp6,origin,njoy,serpent,sudo
-    shell: /bin/bash
-    uid: 1013
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">rf8465</span>
+    <span class="l l-Scalar l-Scalar-Plain">groups</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">users,mcnpx,mcnp6,origin,njoy,serpent,sudo</span>
+    <span class="l l-Scalar l-Scalar-Plain">shell</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">/bin/bash</span>
+    <span class="l l-Scalar l-Scalar-Plain">uid</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">1013</span>
 
-  - name: admin
-    groups: mcnpx,mcnp6,origin,njoy,serpent,sudo
-    shell: /bin/bash
-    uid: 1014
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">admin</span>
+    <span class="l l-Scalar l-Scalar-Plain">groups</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">mcnpx,mcnp6,origin,njoy,serpent,sudo</span>
+    <span class="l l-Scalar l-Scalar-Plain">shell</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">/bin/bash</span>
+    <span class="l l-Scalar l-Scalar-Plain">uid</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">1014</span>
 
-# List of groups.  Add or remove groups from the cluster here.
-cluster_groups:
-  - name: vera-admin
-    gid:  2101
-  - name: mcnpx
-    gid:  2102
-  - name: mcnp6
-    gid:  2103
-  - name: origin
-    gid:  2104
-  - name: njoy
-    gid:  2105
-  - name: serpent
-    gid:  2106
-  - name: users
-    gid:  2100
-  - name: sudo
-    gid:  2000
+<span class="c1"># List of groups.  Add or remove groups from the cluster here.</span>
+<span class="l l-Scalar l-Scalar-Plain">cluster_groups</span><span class="p p-Indicator">:</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">vera-admin</span>
+    <span class="l l-Scalar l-Scalar-Plain">gid</span><span class="p p-Indicator">:</span>  <span class="l l-Scalar l-Scalar-Plain">2101</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">mcnpx</span>
+    <span class="l l-Scalar l-Scalar-Plain">gid</span><span class="p p-Indicator">:</span>  <span class="l l-Scalar l-Scalar-Plain">2102</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">mcnp6</span>
+    <span class="l l-Scalar l-Scalar-Plain">gid</span><span class="p p-Indicator">:</span>  <span class="l l-Scalar l-Scalar-Plain">2103</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">origin</span>
+    <span class="l l-Scalar l-Scalar-Plain">gid</span><span class="p p-Indicator">:</span>  <span class="l l-Scalar l-Scalar-Plain">2104</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">njoy</span>
+    <span class="l l-Scalar l-Scalar-Plain">gid</span><span class="p p-Indicator">:</span>  <span class="l l-Scalar l-Scalar-Plain">2105</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">serpent</span>
+    <span class="l l-Scalar l-Scalar-Plain">gid</span><span class="p p-Indicator">:</span>  <span class="l l-Scalar l-Scalar-Plain">2106</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">users</span>
+    <span class="l l-Scalar l-Scalar-Plain">gid</span><span class="p p-Indicator">:</span>  <span class="l l-Scalar l-Scalar-Plain">2100</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">sudo</span>
+    <span class="l l-Scalar l-Scalar-Plain">gid</span><span class="p p-Indicator">:</span>  <span class="l l-Scalar l-Scalar-Plain">2000</span>
 
-# dummy variable used for temp key storage
-keys_dir:  /root/nukecluster/roles/common/files
+<span class="c1"># dummy variable used for temp key storage</span>
+<span class="l l-Scalar l-Scalar-Plain">keys_dir</span><span class="p p-Indicator">:</span>  <span class="l l-Scalar l-Scalar-Plain">/root/nukecluster/roles/common/files</span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -122,7 +128,7 @@ keys_dir:  /root/nukecluster/roles/common/files
 Indentation must be perfect (use spaces only).</p>
 </div>
 <p>When this user settings file is modified the next step is to run the usermod.yml playbook (idiomatically &#8220;usermod play&#8221;) in the base directory of this repo:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c">#ansible-playbook usermod.yml</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#ansible-playbook usermod.yml</span>
 </pre></div>
 </div>
 <p>By default, the usermod.yml top level script will run all user, group, and ssh commands required.</p>
@@ -136,7 +142,7 @@ Indentation must be perfect (use spaces only).</p>
 <ol class="arabic simple">
 <li>Request a rsa public key from the prospective new user.</li>
 <li>Add that rsa pub key to his <code class="docutils literal"><span class="pre">/home/&lt;his_username&gt;/.ssh/foreign_keys</span></code> file. Create this file if it does not already exist.</li>
-<li>Add his username (and groups, prefered shell &amp; uid) to the users and groups settings file (<code class="docutils literal"><span class="pre">usr_settings.yml</span></code>) as shown above.  Dont forget to assign the new user a unique UID.</li>
+<li>Add his username (and groups, preferred shell &amp; uid) to the users and groups settings file (<code class="docutils literal"><span class="pre">usr_settings.yml</span></code>) as shown above.  Don&#8217;t forget to assign the new user a unique UID.</li>
 <li>Run the usermod play.</li>
 </ol>
 <div class="admonition note">
@@ -144,23 +150,64 @@ Indentation must be perfect (use spaces only).</p>
 <p class="last">By default, the usermod play looks for a <code class="docutils literal"><span class="pre">foreign_keys</span></code> file in the <code class="docutils literal"><span class="pre">/home/&lt;user&gt;/.ssh/.</span></code> folder of each user when run.  Keys in this file are appended to the <code class="docutils literal"><span class="pre">authorized_keys</span></code> file for that user.  This is done to try to keep externally generated keys seperate from internally generated keys.</p>
 </div>
 </div>
+<div class="section" id="manipulating-groups-and-permissions">
+<h2>Manipulating Groups and Permissions<a class="headerlink" href="#manipulating-groups-and-permissions" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Edit the <code class="docutils literal"><span class="pre">/root/nukecluster/roles/common/vars/main.yml</span></code> file to reflect new groups and permissions.</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Ensure to follow yml syntax.  Also make sure to remember unique GID (group IDs) and UID (User IDs).</p>
+</div>
+<ul>
+<li><p class="first">Run the usermod.yml play.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#cd /root/nukecluster</span>
+<span class="c1">#ansible-playbook usermod.yml</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div>
 <div class="section" id="enabling-auto-ssh-chroot-on-login">
 <h2>Enabling Auto SSH Chroot on login<a class="headerlink" href="#enabling-auto-ssh-chroot-on-login" title="Permalink to this headline">¶</a></h2>
 <p>On the base system, edit <code class="docutils literal"><span class="pre">/etc/ssh/sshd_config</span></code>.  At the end of this file, add</p>
-<div class="highlight-python"><div class="highlight"><pre>Match group users
+<div class="highlight-python"><div class="highlight"><pre><span></span>Match group users
     ChrootDirectory /srv/nukeroot
     AllowX11Forwarding yes
 </pre></div>
 </div>
 <p>Restart sshd</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c">#/etc/init.d/ssh restart</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#/etc/init.d/ssh restart</span>
 </pre></div>
 </div>
-<p>When users in the <code class="docutils literal"><span class="pre">users</span></code> group ssh into the cluster, they will imediately be relegated to
+<p>When users in the <code class="docutils literal"><span class="pre">users</span></code> group ssh into the cluster, they will immediately be relegated to
 the Chroot environment, where all the compute software lives.  Non-admins essentially never see the
-host operating system.  It is imparitive that the admin account is not a member of the <code class="docutils literal"><span class="pre">users</span></code> group
+host operating system.  It is imperative that the admin account is not a member of the <code class="docutils literal"><span class="pre">users</span></code> group
 so that when the admin remotely logs in, he has access to the base OS AND the chroot.  There is no good
 way to break out of the chroot once you are placed inside by sshd.</p>
+</div>
+<div class="section" id="securing-sshd">
+<h2>Securing sshd<a class="headerlink" href="#securing-sshd" title="Permalink to this headline">¶</a></h2>
+<p>On the base OS: in the <code class="docutils literal"><span class="pre">/etc/ssh/sshd_config</span></code> file ensure that cleer text passwords
+are disabled with the following two lines:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>PasswordAuthentication no
+PermitEmptyPasswords no
+</pre></div>
+</div>
+<p>Also disable password based root login with:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>PermitRootLogin without-password
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This sounds scary but according to the documentation this setting ONLY allows
+root login via SSH key.  NEVER place any pub ssh key from ANY computer outside of the
+nukestar LAN inside the root authorized_keys file!</p>
+</div>
+<p>If any changes were made, restart sshd</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#/etc/init.d/ssh restart</span>
+</pre></div>
+</div>
 </div>
 </div>
 
@@ -174,7 +221,9 @@ way to break out of the chroot once you are placed inside by sshd.</p>
   <ul>
 <li><a class="reference internal" href="#">User and Group Management</a><ul>
 <li><a class="reference internal" href="#adding-new-users-to-cluster">Adding New Users to Cluster</a></li>
+<li><a class="reference internal" href="#manipulating-groups-and-permissions">Manipulating Groups and Permissions</a></li>
 <li><a class="reference internal" href="#enabling-auto-ssh-chroot-on-login">Enabling Auto SSH Chroot on login</a></li>
+<li><a class="reference internal" href="#securing-sshd">Securing sshd</a></li>
 </ul>
 </li>
 </ul>
@@ -226,7 +275,7 @@ way to break out of the chroot once you are placed inside by sshd.</p>
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2014, william gurecky.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
     </div>
   </body>
 </html>

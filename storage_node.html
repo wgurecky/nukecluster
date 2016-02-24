@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="Nukestar 0.1 documentation" href="index.html" />
-    <link rel="prev" title="Base Software" href="software_setup.html" /> 
+    <link rel="prev" title="Hardware Maintainance Guide" href="maintenance.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -34,7 +34,7 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="software_setup.html" title="Base Software"
+          <a href="maintenance.html" title="Hardware Maintainance Guide"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Nukestar 0.1 documentation</a> &raquo;</li> 
       </ul>
@@ -47,43 +47,43 @@
             
   <div class="section" id="configure-storage-nodes">
 <h1>Configure Storage Nodes<a class="headerlink" href="#configure-storage-nodes" title="Permalink to this headline">¶</a></h1>
-<p>If seperate storage are desired; configuring cluster storage precedes configuing the head node or the
-compute nodes.  This storage node configuratin guide assumes that the storage nodes already have a
+<p>If separate storage are desired; configuring cluster storage precedes configuring the head node or the
+compute nodes.  This storage node configuration guide assumes that the storage nodes already have a
 clean Debian installation on them.</p>
 <p>Here we will assume we have 4 storage nodes and each node has 1 drive dedicated to the OS install and 2 drives available for both a
 home and a root glusterFS brick (5 drives total).  Of course, depending on hardware the final setup may change.</p>
 <div class="section" id="setup-raid-on-each-storage-node">
 <h2>Setup RAID on Each Storage Node<a class="headerlink" href="#setup-raid-on-each-storage-node" title="Permalink to this headline">¶</a></h2>
 <p>create a single empty primary partition the target glusterFS disks</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">fdisk</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">sdb</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">fdisk</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">sdb</span>
 <span class="n">fdisk</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">sdc</span>
 <span class="n">fdisk</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">sdd</span>
 <span class="n">fdisk</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">sde</span>
 </pre></div>
 </div>
 <p>Setup RAID(s)</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">mdadm</span> <span class="o">--</span><span class="n">create</span> <span class="o">--</span><span class="n">verbose</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">md0</span> <span class="o">--</span><span class="n">level</span><span class="o">=</span><span class="n">mirror</span> <span class="o">--</span><span class="n">raid</span><span class="o">-</span><span class="n">devices</span><span class="o">=</span><span class="mi">2</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">sdb1</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">sdc1</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">mdadm</span> <span class="o">--</span><span class="n">create</span> <span class="o">--</span><span class="n">verbose</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">md0</span> <span class="o">--</span><span class="n">level</span><span class="o">=</span><span class="n">mirror</span> <span class="o">--</span><span class="n">raid</span><span class="o">-</span><span class="n">devices</span><span class="o">=</span><span class="mi">2</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">sdb1</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">sdc1</span>
 <span class="n">mdadm</span> <span class="o">--</span><span class="n">create</span> <span class="o">--</span><span class="n">verbose</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">md1</span> <span class="o">--</span><span class="n">level</span><span class="o">=</span><span class="n">mirror</span> <span class="o">--</span><span class="n">raid</span><span class="o">-</span><span class="n">devices</span><span class="o">=</span><span class="mi">2</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">sdd1</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">sde1</span>
 </pre></div>
 </div>
 <p>create ext4 filesystem(s)</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">mkfs</span><span class="o">.</span><span class="n">ext4</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">md0</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">mkfs</span><span class="o">.</span><span class="n">ext4</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">md0</span>
 <span class="n">mkfs</span><span class="o">.</span><span class="n">ext4</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">md1</span>
 </pre></div>
 </div>
 <p>create glusterfs dir</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">mkdir</span> <span class="o">/</span><span class="n">glusterfs</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">mkdir</span> <span class="o">/</span><span class="n">glusterfs</span>
 <span class="n">mkdir</span> <span class="o">/</span><span class="n">glusterfs</span><span class="o">/</span><span class="n">nukeroot</span>
 <span class="n">mkdir</span> <span class="o">/</span><span class="n">glusterfs</span><span class="o">/</span><span class="n">nukehome</span>
 </pre></div>
 </div>
 <p>mount newly created ext4 fs to the above dirs.  Add the following to /etc/fstab</p>
-<div class="highlight-python"><div class="highlight"><pre>/dev/md0 /glusterfs/nukeroot ext4 defaults,noatime 0 0
+<div class="highlight-python"><div class="highlight"><pre><span></span>/dev/md0 /glusterfs/nukeroot ext4 defaults,noatime 0 0
 /dev/md1 /glusterfs/nukehome ext4 defaults,noatime 0 0
 </pre></div>
 </div>
 <p>run</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">mount</span> <span class="o">-</span><span class="n">a</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">mount</span> <span class="o">-</span><span class="n">a</span>
 </pre></div>
 </div>
 <p>Ensure that <code class="docutils literal"><span class="pre">/etc/hosts</span></code> contains hostnames and IPs of other storage and compute nodes.</p>
@@ -91,7 +91,7 @@ home and a root glusterFS brick (5 drives total).  Of course, depending on hardw
 <div class="section" id="setup-glusterfs-on-each-storage-node">
 <h2>Setup GlusterFS on Each Storage Node<a class="headerlink" href="#setup-glusterfs-on-each-storage-node" title="Permalink to this headline">¶</a></h2>
 <p>Install glusterFS.</p>
-<div class="highlight-python"><div class="highlight"><pre>wget -O - http://download.gluster.org/pub/gluster/glusterfs/3.5/3.5.1/Debian/pubkey.gpg | apt-key add -
+<div class="highlight-python"><div class="highlight"><pre><span></span>wget -O - http://download.gluster.org/pub/gluster/glusterfs/3.5/3.5.1/Debian/pubkey.gpg | apt-key add -
 echo deb http://download.gluster.org/pub/gluster/glusterfs/3.5/3.5.1/Debian/apt wheezy main &gt;  \
               /etc/apt/sources.list.d/gluster.list
 apt-get update
@@ -99,17 +99,17 @@ apt-get install glusterfs-server
 </pre></div>
 </div>
 <p>Configure glusterFS:</p>
-<div class="highlight-python"><div class="highlight"><pre>gluster peer probe &lt;hostnames of OTHER storage nodes&gt;
+<div class="highlight-python"><div class="highlight"><pre><span></span>gluster peer probe &lt;hostnames of OTHER storage nodes&gt;
 </pre></div>
 </div>
 <p>When the above tasks have been completed on ALL storage nodes run:</p>
 <p>Create glusterFS file system(s).  This step only needs to be performed on one of the storage nodes.</p>
-<div class="highlight-python"><div class="highlight"><pre>gluster volume create nukeroot replica 2 stor01:/glusterfs/nukeroot stor02:/glusterfs/nukeroot stor03:/glusterfs/nukeroot stor04:/glusterfs/nukeroot
+<div class="highlight-python"><div class="highlight"><pre><span></span>gluster volume create nukeroot replica 2 stor01:/glusterfs/nukeroot stor02:/glusterfs/nukeroot stor03:/glusterfs/nukeroot stor04:/glusterfs/nukeroot
 gluster volume create nukehome replica 2 stor01:/glusterfs/nukehome stor02:/glusterfs/nukehome stor03:/glusterfs/nukehome stor04:/glusterfs/nukehome
 </pre></div>
 </div>
 <p>Finish glusterFS install</p>
-<div class="highlight-python"><div class="highlight"><pre>gluster volume info
+<div class="highlight-python"><div class="highlight"><pre><span></span>gluster volume info
 gluster volume start nukeroot
 gluster volume start nukehome
 </pre></div>
@@ -138,8 +138,8 @@ gluster volume start nukehome
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="software_setup.html"
-                        title="previous chapter">Base Software</a></p>
+  <p class="topless"><a href="maintenance.html"
+                        title="previous chapter">Hardware Maintainance Guide</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -171,14 +171,14 @@ gluster volume start nukehome
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="software_setup.html" title="Base Software"
+          <a href="maintenance.html" title="Hardware Maintainance Guide"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Nukestar 0.1 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2014, william gurecky.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
     </div>
   </body>
 </html>

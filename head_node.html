@@ -53,7 +53,7 @@
 <h1>Head Node OS Install<a class="headerlink" href="#head-node-os-install" title="Permalink to this headline">¶</a></h1>
 <p>When installing Debian on the head node, take care to configure the raid 10 correctly, utilizing all drives in a single mdraid storage pool.
 A recommended raid 10 + LVM setup is shown below.  Logical Volume Management (LVM) is useful when creating backup snapshots or resizing partitions.:</p>
-<div class="highlight-python"><div class="highlight"><pre>-------------------------------------------------------------
+<div class="highlight-python"><div class="highlight"><pre><span></span>-------------------------------------------------------------
 |                       RAID 10 Array                       |
 | Disk 1 (sda) | Disk 2 (sdb) | Disk 3 (sdc) | Disk 4 (sdd) | &lt;- config each divice as RAID device
 -------------------------------------------------------------
@@ -71,9 +71,8 @@ A recommended raid 10 + LVM setup is shown below.  Logical Volume Management (LV
 As of the time of this writing (fall 2015) grub can boot from the /boot directory located
 inside a raid 10 array.  No need to make a seperate /boot partition.</p>
 </div>
-<p>The Debian installations will ask
-for a new user to be setup  (in addition to the root account).  This user should be the default
-system administration account.</p>
+<p>The Debian installer will ask
+for a new user to be setup  (in addition to the root account).  This user should be the default system administration account.  For the purpose of this guide, the administrator account is <code class="docutils literal"><span class="pre">admin</span></code>.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">The administrators account is NOT the root account.  We will dissallow root login from the
@@ -82,26 +81,26 @@ you must switch users to the root account to make modifications
 to the base system.  Installing sudo and adding admin users to the sudo group aliviates some
 minor annoyances of having to type &#8220;su&#8221; all the time.</p>
 </div>
-<p>Durring the install procedure, there will be an option to install some software packages.  They are
+<p>During the install procedure, there will be an option to install some software packages.  They are
 all optional, however, it is recommended to install the ssh package and disable any &#8220;printer&#8221; packages.
-It is not neccisary to install a graphical desktop environment - it will only consume hard drive space but has no
+It is not necessary to install a graphical desktop environment - it will only consume hard drive space but has no
 other consequences.</p>
 <p>From here on, every command that is
-executed as root will have a <code class="docutils literal"><span class="pre">#</span></code> symbol preceeding it.  Every command that is executed
-by a limited privilage account will be preceeded by a <code class="docutils literal"><span class="pre">$</span></code>.</p>
-<p>If no graphical desktop environment package was selected durring the initial instal, you can choose to install a minimal
+executed as root will have a <code class="docutils literal"><span class="pre">#</span></code> symbol preceding it.  Every command that is executed
+by a limited privileged account will be preceded by a <code class="docutils literal"><span class="pre">$</span></code>.</p>
+<p>If no graphical desktop environment package was selected during the initial install, you can choose to install a minimal
 gui desktop environment after you boot the new head node OS for the first time.
-X11, a basic web browser such as Madori and a simple destop environment should be installed on the head node.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c"># apt-get update</span>
-<span class="c"># apt-get install Xorg madori dwm</span>
+X11, a basic web browser such as Madori and a simple desktop environment should be installed on the head node.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># apt-get update</span>
+<span class="c1"># apt-get install Xorg madori dwm</span>
 </pre></div>
 </div>
-<p>If dwm is installed, the contensts of <code class="docutils literal"><span class="pre">$~/.xinitrc</span></code> should contain.</p>
-<div class="highlight-python"><div class="highlight"><pre>exec dwm &amp;
+<p>If dwm is installed, the contents of <code class="docutils literal"><span class="pre">$~/.xinitrc</span></code> should contain.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>exec dwm &amp;
 </pre></div>
 </div>
-<p>The graphical environment is lauched by</p>
-<div class="highlight-python"><div class="highlight"><pre>$startx
+<p>The graphical environment is launched by</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>$startx
 </pre></div>
 </div>
 <p>This will allow easy graphical configuration of the Firewall in the following steps. Avoid running X11 as root. The
@@ -119,13 +118,14 @@ be managed just like an ethernet network.</p>
 <h1>Configure Head Node<a class="headerlink" href="#configure-head-node" title="Permalink to this headline">¶</a></h1>
 <p>These steps are to be executed after a fresh install of Debian Linux is made on the head node.</p>
 <p>The following image illustrates the setup we are working towards:</p>
-<a class="reference internal image-reference" href="_images/nukestar_pxe.png"><img alt="_images/nukestar_pxe.png" class="align-center" src="_images/nukestar_pxe.png" style="width: 606.8px; height: 276.8px;" /></a>
-<p>Become root</p>
-<div class="highlight-python"><div class="highlight"><pre>$su -
+<a class="reference internal image-reference" href="_images/nukestar_pxe.png"><img alt="_images/nukestar_pxe.png" class="align-center" src="_images/nukestar_pxe.png" /></a>
+<p>In this guide, the terms <code class="docutils literal"><span class="pre">HostOS</span></code> and <code class="docutils literal"><span class="pre">Base</span> <span class="pre">OS</span></code> will be used interchangeably.
+Become root</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>$su -
 </pre></div>
 </div>
 <p>Update <code class="docutils literal"><span class="pre">/etc/hosts</span></code>.  Ensure this file contains all IPs and hostnames of all nodes</p>
-<div class="highlight-python"><div class="highlight"><pre>192.168.1.101  nukestar01
+<div class="highlight-python"><div class="highlight"><pre><span></span>192.168.1.101  nukestar01
 192.168.1.102  nukestar02
 192.168.1.103  nukestar03
 192.168.1.104  nukestar04
@@ -134,28 +134,28 @@ be managed just like an ethernet network.</p>
 </pre></div>
 </div>
 <p>Install prerequisite software</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c">#apt-get update</span>
-<span class="c">#apt-get install tftpd-hpa nfs-kernel-server debootstrap syslinux ssh nfs-common pxelinux ntp</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#apt-get update</span>
+<span class="c1">#apt-get install tftpd-hpa nfs-kernel-server debootstrap syslinux ssh nfs-common pxelinux ntp</span>
 </pre></div>
 </div>
 <p>Make root rsa ssh key pair</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c">#cd /root</span>
-<span class="c">#ssh-keygen -t rsa</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#cd /root</span>
+<span class="c1">#ssh-keygen -t rsa</span>
 </pre></div>
 </div>
 <p>do not set a password when propted (password-less key based login will be used).</p>
 <div class="section" id="setup-chroot">
 <h2>Setup Chroot<a class="headerlink" href="#setup-chroot" title="Permalink to this headline">¶</a></h2>
 <p>Make a chroot root dir and chroot home dir.  Debootstrap install into /srv/nukeroot directory.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c">#mkdir /srv/nukeroot /home/srv/nukehome</span>
-<span class="c">#debootstrap jessie /srv/nukeroot http://http.debian.net/debian</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#mkdir -p /srv/nukeroot /home/srv/nukehome</span>
+<span class="c1">#debootstrap jessie /srv/nukeroot http://http.debian.net/debian</span>
 </pre></div>
 </div>
 <p>Update <code class="docutils literal"><span class="pre">/etc/fstab</span></code> on host OS</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c">#echo &quot;/home/srv/nukehome /srv/nukeroot/home bind defaults,bind 0 0&quot; &gt;&gt; /etc/fstab</span>
-<span class="c">#echo &quot;/dev /srv/nukeroot/dev auto bind 0 0&quot; &gt;&gt; /etc/fstab</span>
-<span class="c">#echo &quot;/dev/pts /srv/nukeroot/dev/pts auto bind  0 0&quot; &gt;&gt; /etc/fstab</span>
-<span class="c">#mount -a</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#echo &quot;/home/srv/nukehome /srv/nukeroot/home bind defaults,bind 0 0&quot; &gt;&gt; /etc/fstab</span>
+<span class="c1">#echo &quot;/dev /srv/nukeroot/dev auto bind 0 0&quot; &gt;&gt; /etc/fstab</span>
+<span class="c1">#echo &quot;/dev/pts /srv/nukeroot/dev/pts auto bind  0 0&quot; &gt;&gt; /etc/fstab</span>
+<span class="c1">#mount -a</span>
 </pre></div>
 </div>
 </div>
@@ -170,17 +170,17 @@ in the chroot <code class="docutils literal"><span class="pre">/srv/nukeroot/roo
 If you do not want to use the ansible scripts, then ignore.</p>
 </div>
 <p>chroot</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c">#chroot /srv/nukeroot</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#chroot /srv/nukeroot</span>
 </pre></div>
 </div>
-<p>All chroot commands will be preceeded with <code class="docutils literal"><span class="pre">#&gt;</span></code>.</p>
-<p>Clear contents of <code class="docutils literal"><span class="pre">#&gt;/etc/hostname</span></code> because hostname will be obained from DHCP server.</p>
+<p>NOTE: All chroot commands will be preceeded with <code class="docutils literal"><span class="pre">#&gt;</span></code>.</p>
+<p>Clear contents of <code class="docutils literal"><span class="pre">#&gt;/etc/hostname</span></code> because hostname will be obtained from DHCP server.</p>
 <p>Enable non-free package repo. Edit <code class="docutils literal"><span class="pre">#&gt;/etc/apt/sources.list</span></code> so it contains</p>
-<div class="highlight-python"><div class="highlight"><pre>deb http://http.debian.net/debian jessie main non-free
+<div class="highlight-python"><div class="highlight"><pre><span></span>deb http://http.debian.net/debian jessie main non-free
 </pre></div>
 </div>
 <p>Install base packages in chroot environment</p>
-<div class="highlight-python"><div class="highlight"><pre>#&gt;apt-get update
+<div class="highlight-python"><div class="highlight"><pre><span></span>#&gt;apt-get update
 #&gt;apt-get install aufs-tools nfs-client linux-image-3.16.0-4-amd64 vim ntp
           initramfs-tools locales dialog build-essential firmware-bnx2
 </pre></div>
@@ -195,17 +195,17 @@ NIC driver is not avalible on the iso, the network interface on the compute node
 not work and the compute nodes will fail to boot.</p>
 </div>
 <p>... Note:</p>
-<div class="highlight-python"><div class="highlight"><pre>The linux-image package version will change depending on what version of Debian is being run.
+<div class="highlight-python"><div class="highlight"><pre><span></span>The linux-image package version will change depending on what version of Debian is being run.
 3.16.0-4-amd64 is the version packaged with debian &quot;jessie&quot; (8.2).
 </pre></div>
 </div>
 <p>Generate root ssh keys in chroot</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c">#&gt;cd /root</span>
-<span class="c">#&gt;ssh-keygen -t rsa</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#&gt;cd /root</span>
+<span class="c1">#&gt;ssh-keygen -t rsa</span>
 </pre></div>
 </div>
 <p>Update <code class="docutils literal"><span class="pre">#&gt;/etc/hosts</span></code>.  Ensure this file contains all IPs and hostnames of all nodes</p>
-<div class="highlight-python"><div class="highlight"><pre>192.168.1.101  nukestar01
+<div class="highlight-python"><div class="highlight"><pre><span></span>192.168.1.101  nukestar01
 192.168.1.102  nukestar02
 192.168.1.103  nukestar03
 192.168.1.104  nukestar04
@@ -214,16 +214,16 @@ not work and the compute nodes will fail to boot.</p>
 </pre></div>
 </div>
 <p>Update <code class="docutils literal"><span class="pre">#&gt;/etc/fstab</span></code> in chroot</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c">#&gt;echo &quot;nukestar01:/home/srv/nukehome /home nfs noatime 0 0&quot; &gt;&gt; /etc/fstab</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#&gt;echo &quot;nukestar01:/home/srv/nukehome /home nfs noatime 0 0&quot; &gt;&gt; /etc/fstab</span>
 </pre></div>
 </div>
 <p>Generate locales</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c">#&gt;locale-gen en_US.UTF-8</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#&gt;locale-gen en_US.UTF-8</span>
 </pre></div>
 </div>
 <p>Configure initramfs. Ensure the following lines exists in
 <code class="docutils literal"><span class="pre">#&gt;/etc/initramfs-tools/initramfs.conf</span></code>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">BOOT</span><span class="o">=</span><span class="n">nfs</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">BOOT</span><span class="o">=</span><span class="n">nfs</span>
 <span class="n">DEVICE</span><span class="o">=</span><span class="n">eth0</span>
 </pre></div>
 </div>
@@ -233,17 +233,17 @@ not work and the compute nodes will fail to boot.</p>
 hardware factors.</p>
 </div>
 <p>Create initrd image</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c">#&gt; mkinitramfs -o initrd.image.netboot</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#&gt; mkinitramfs -o initrd.image.netboot</span>
 </pre></div>
 </div>
 <p>Configure overlay file system script.  Aufs allows local changes to be
 stored in ram on the diskless clients</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c">#&gt; echo aufs &gt;&gt; /etc/initramfs-tools/modules</span>
-<span class="c">#&gt; vim /etc/initramfs-tools/scripts/init-bottom/aufs</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#&gt; echo aufs &gt;&gt; /etc/initramfs-tools/modules</span>
+<span class="c1">#&gt; vim /etc/initramfs-tools/scripts/init-bottom/aufs</span>
 </pre></div>
 </div>
 <p>Fill with the following</p>
-<div class="highlight-python"><div class="highlight"><pre>modprobe aufs
+<div class="highlight-python"><div class="highlight"><pre><span></span>modprobe aufs
 mkdir /ro /rw /aufs
 mount -t tmpfs tmpfs /rw -o noatime,mode=0755
 mount --move $rootmnt /ro
@@ -256,19 +256,19 @@ exit 0
 </pre></div>
 </div>
 <p>Make executable</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c">#&gt; chmod +x /etc/initramfs-tools/scripts/init-bottom/aufs</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#&gt; chmod +x /etc/initramfs-tools/scripts/init-bottom/aufs</span>
 </pre></div>
 </div>
 <p>Update boot image</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c">#&gt; update-initramfs -u</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#&gt; update-initramfs -u</span>
 </pre></div>
 </div>
 <p>Set a root password</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c">#&gt; passwd root</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#&gt; passwd root</span>
 </pre></div>
 </div>
 <p>Exit chroot</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c">#&gt; exit</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#&gt; exit</span>
 </pre></div>
 </div>
 <p>Copy contents of chroot root pub ssh key <code class="docutils literal"><span class="pre">/srv/nukeroot/root/.ssh/id_rsa.pub</span></code> to the
@@ -277,10 +277,10 @@ base OS root <code class="docutils literal"><span class="pre">/root/.ssh/authori
 <div class="section" id="tftp-and-pxe-boot-setup">
 <h2>TFTP and PXE boot Setup<a class="headerlink" href="#tftp-and-pxe-boot-setup" title="Permalink to this headline">¶</a></h2>
 <p>Back on the head node copy boot image to <code class="docutils literal"><span class="pre">/srv/tftp</span></code></p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c"># mkdir /srv/tftp</span>
-<span class="c"># cp /srv/nukeroot/boot/initrd.img* /srv/tftp/.</span>
-<span class="c"># cp /srv/nukeroot/boot/vmlinuz-* /srv/tftp/.</span>
-<span class="c"># cp /usr/lib/PXELINUX/pxelinux.0 /srv/tftp/.</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># mkdir /srv/tftp</span>
+<span class="c1"># cp /srv/nukeroot/boot/initrd.img* /srv/tftp/.</span>
+<span class="c1"># cp /srv/nukeroot/boot/vmlinuz-* /srv/tftp/.</span>
+<span class="c1"># cp /usr/lib/PXELINUX/pxelinux.0 /srv/tftp/.</span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -289,11 +289,11 @@ base OS root <code class="docutils literal"><span class="pre">/root/.ssh/authori
 notes on where pxelinux.0 will be placed by the syslinux or pxelinux package.</p>
 </div>
 <p>Configure PXE</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c"># mkdir /srv/tftp/pxelinux.cfg</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># mkdir /srv/tftp/pxelinux.cfg</span>
 </pre></div>
 </div>
 <p>Fill <code class="docutils literal"><span class="pre">#/srv/tftp/pxelinux.cfg/default</span></code> with</p>
-<div class="highlight-python"><div class="highlight"><pre>default Debian
+<div class="highlight-python"><div class="highlight"><pre><span></span>default Debian
 prompt 1
 timeout 5
 label Debian
@@ -307,37 +307,37 @@ append ro initrd=initrd.img-&lt;name_of_image&gt; root=/dev/nfs ip=dhcp nfsroot=
 /srv/nukeroot/boot/vmlinuz-*</p>
 </div>
 <p>Fill <code class="docutils literal"><span class="pre">#/etc/default/tftpd-hpa</span></code> with the following</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">TFTP_USERNAME</span> <span class="o">=</span> <span class="s">&quot;tftp&quot;</span>
-<span class="n">TFTP_DIRECTORY</span> <span class="o">=</span> <span class="s">&quot;/srv/nukeroot&quot;</span>
-<span class="n">TFTP_ADDRESS</span> <span class="o">=</span> <span class="s">&quot;0.0.0.0:69&quot;</span>
-<span class="n">TFTP_OPTIONS</span> <span class="o">=</span> <span class="s">&quot;--secure&quot;</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">TFTP_USERNAME</span> <span class="o">=</span> <span class="s2">&quot;tftp&quot;</span>
+<span class="n">TFTP_DIRECTORY</span> <span class="o">=</span> <span class="s2">&quot;/srv/nukeroot&quot;</span>
+<span class="n">TFTP_ADDRESS</span> <span class="o">=</span> <span class="s2">&quot;0.0.0.0:69&quot;</span>
+<span class="n">TFTP_OPTIONS</span> <span class="o">=</span> <span class="s2">&quot;--secure&quot;</span>
 </pre></div>
 </div>
 <p>Restart tftpd-hpa</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c">#/etc/init.d/tftpd-hpa restart</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#/etc/init.d/tftpd-hpa restart</span>
 </pre></div>
 </div>
 <p>Edit <code class="docutils literal"><span class="pre">#/etc/exports</span></code> file to contain NFS export details</p>
-<div class="highlight-python"><div class="highlight"><pre>/srv/nukeroot  192.168.1.102(ro,no_root_squash,async,insecure,no_subtree_check) \
+<div class="highlight-python"><div class="highlight"><pre><span></span>/srv/nukeroot  192.168.1.102(ro,no_root_squash,async,insecure,no_subtree_check) \
 192.168.1.103(ro,no_root_squash,async,insecure,no_subtree_check) \
 192.168.1.104(ro,no_root_squash,async,insecure,no_subtree_check) \
 192.168.1.105(ro,no_root_squash,async,insecure,no_subtree_check) \
 192.168.1.106(ro,no_root_squash,async,insecure,no_subtree_check)
 #
 /home/srv/nukehome  192.168.1.102(rw,no_root_squash,async,insecure,no_subtree_check) \
-/home/srv/nukehome 192.168.1.103(rw,no_root_squash,async,insecure,no_subtree_check) \
-/home/srv/nukehome 192.168.1.104(rw,no_root_squash,async,insecure,no_subtree_check) \
-/home/srv/nukehome 192.168.1.105(rw,no_root_squash,async,insecure,no_subtree_check) \
-/home/srv/nukehome 192.168.1.106(rw,no_root_squash,async,insecure,no_subtree_check)
+192.168.1.103(rw,no_root_squash,async,insecure,no_subtree_check) \
+192.168.1.104(rw,no_root_squash,async,insecure,no_subtree_check) \
+192.168.1.105(rw,no_root_squash,async,insecure,no_subtree_check) \
+192.168.1.106(rw,no_root_squash,async,insecure,no_subtree_check)
 </pre></div>
 </div>
 <p>Run</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c">#exportfs -ra</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#exportfs -ra</span>
 </pre></div>
 </div>
 <p>You can now configure the compute nodes&#8217; to network boot via their bios menus.  Typically, the option to PXE (or network) boot
 exists in the boot menu.  All other boot options can be disabled.  Once configured,  boot up all the compute nodes
-and enjoy stateless node convinience!</p>
+and enjoy stateless node convenience!</p>
 </div>
 </div>
 
@@ -405,7 +405,7 @@ and enjoy stateless node convinience!</p>
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2014, william gurecky.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
     </div>
   </body>
 </html>

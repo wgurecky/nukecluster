@@ -21,9 +21,8 @@ A recommended raid 10 + LVM setup is shown below.  Logical Volume Management (LV
     As of the time of this writing (fall 2015) grub can boot from the /boot directory located 
     inside a raid 10 array.  No need to make a seperate /boot partition.
 
-The Debian installations will ask
-for a new user to be setup  (in addition to the root account).  This user should be the default
-system administration account.  
+The Debian installer will ask
+for a new user to be setup  (in addition to the root account).  This user should be the default system administration account.  For the purpose of this guide, the administrator account is ``admin``.
 
 .. Note::
     The administrators account is NOT the root account.  We will dissallow root login from the 
@@ -32,27 +31,27 @@ system administration account.
     to the base system.  Installing sudo and adding admin users to the sudo group aliviates some
     minor annoyances of having to type "su" all the time.
 
-Durring the install procedure, there will be an option to install some software packages.  They are
+During the install procedure, there will be an option to install some software packages.  They are
 all optional, however, it is recommended to install the ssh package and disable any "printer" packages.
-It is not neccisary to install a graphical desktop environment - it will only consume hard drive space but has no
+It is not necessary to install a graphical desktop environment - it will only consume hard drive space but has no
 other consequences.  
 
 From here on, every command that is
-executed as root will have a ``#`` symbol preceeding it.  Every command that is executed
-by a limited privilage account will be preceeded by a ``$``.
+executed as root will have a ``#`` symbol preceding it.  Every command that is executed
+by a limited privileged account will be preceded by a ``$``.
 
-If no graphical desktop environment package was selected durring the initial instal, you can choose to install a minimal
+If no graphical desktop environment package was selected during the initial install, you can choose to install a minimal
 gui desktop environment after you boot the new head node OS for the first time.
-X11, a basic web browser such as Madori and a simple destop environment should be installed on the head node. ::
+X11, a basic web browser such as Madori and a simple desktop environment should be installed on the head node. ::
 
     # apt-get update
     # apt-get install Xorg madori dwm
 
-If dwm is installed, the contensts of ``$~/.xinitrc`` should contain. ::
+If dwm is installed, the contents of ``$~/.xinitrc`` should contain. ::
 
     exec dwm &
 
-The graphical environment is lauched by ::
+The graphical environment is launched by ::
     
     $startx
 
@@ -78,6 +77,7 @@ The following image illustrates the setup we are working towards:
    :scale: 40%
    :align: center
 
+In this guide, the terms ``HostOS`` and ``Base OS`` will be used interchangeably.  
 Become root ::
 
     $su -
@@ -108,7 +108,7 @@ Setup Chroot
 
 Make a chroot root dir and chroot home dir.  Debootstrap install into /srv/nukeroot directory. ::
    
-    #mkdir /srv/nukeroot /home/srv/nukehome 
+    #mkdir -p /srv/nukeroot /home/srv/nukehome 
     #debootstrap jessie /srv/nukeroot http://http.debian.net/debian
 
 
@@ -135,9 +135,9 @@ chroot ::
 
     #chroot /srv/nukeroot
 
-All chroot commands will be preceeded with ``#>``.
+NOTE: All chroot commands will be preceeded with ``#>``.
 
-Clear contents of ``#>/etc/hostname`` because hostname will be obained from DHCP server.
+Clear contents of ``#>/etc/hostname`` because hostname will be obtained from DHCP server.
 
 Enable non-free package repo. Edit ``#>/etc/apt/sources.list`` so it contains ::
 
@@ -291,10 +291,10 @@ Edit ``#/etc/exports`` file to contain NFS export details ::
     192.168.1.106(ro,no_root_squash,async,insecure,no_subtree_check)
     #
     /home/srv/nukehome  192.168.1.102(rw,no_root_squash,async,insecure,no_subtree_check) \
-    /home/srv/nukehome 192.168.1.103(rw,no_root_squash,async,insecure,no_subtree_check) \
-    /home/srv/nukehome 192.168.1.104(rw,no_root_squash,async,insecure,no_subtree_check) \
-    /home/srv/nukehome 192.168.1.105(rw,no_root_squash,async,insecure,no_subtree_check) \
-    /home/srv/nukehome 192.168.1.106(rw,no_root_squash,async,insecure,no_subtree_check)
+    192.168.1.103(rw,no_root_squash,async,insecure,no_subtree_check) \
+    192.168.1.104(rw,no_root_squash,async,insecure,no_subtree_check) \
+    192.168.1.105(rw,no_root_squash,async,insecure,no_subtree_check) \
+    192.168.1.106(rw,no_root_squash,async,insecure,no_subtree_check)
      
 Run ::
 
@@ -302,5 +302,5 @@ Run ::
 
 You can now configure the compute nodes' to network boot via their bios menus.  Typically, the option to PXE (or network) boot
 exists in the boot menu.  All other boot options can be disabled.  Once configured,  boot up all the compute nodes
-and enjoy stateless node convinience!
+and enjoy stateless node convenience!
 

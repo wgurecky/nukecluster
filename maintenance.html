@@ -1,0 +1,279 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Hardware Maintainance Guide &mdash; Nukestar 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Nukestar 0.1 documentation" href="index.html" />
+    <link rel="next" title="Configure Storage Nodes" href="storage_node.html" />
+    <link rel="prev" title="Base Software" href="software_setup.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="storage_node.html" title="Configure Storage Nodes"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="software_setup.html" title="Base Software"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Nukestar 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="hardware-maintainance-guide">
+<h1>Hardware Maintainance Guide<a class="headerlink" href="#hardware-maintainance-guide" title="Permalink to this headline">¶</a></h1>
+<p>The following is a collection of common maintenance tasks.</p>
+<div class="section" id="head-node-hard-drive-replacement">
+<h2>Head Node Hard Drive Replacement<a class="headerlink" href="#head-node-hard-drive-replacement" title="Permalink to this headline">¶</a></h2>
+<p>The hard drives in the head node are in a raid10 configuration.</p>
+<p>This way if one drive in the array is lost all the data stored on that raid array
+is still valid.  Though this provides some resilience to hardware failure it is
+not a reason to ignore keeping a proper backup.  See the section on cron job automated
+backups.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Recall all commands preceeded by a # sign are executed as root.  Make sure you are in
+the <cite>base</cite> OS not in the chroot before proceeding.</p>
+</div>
+<p>To check the health of the raid array execute:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#cat /proc/mdstat</span>
+</pre></div>
+</div>
+<p>You will see an output similar to:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>Personalities : [raid10]
+md0 : active raid10 sda1[0] sdb1[1] sdc1[2] sdd1[3]
+3906765800 blocks super 1.2 512K chunks 2 near-copies [4/4][UUUU]
+unused devices: &lt;none&gt;
+</pre></div>
+</div>
+<p>If anything is wrong with a drive
+it will be marked <code class="docutils literal"><span class="pre">failed</span></code> or <code class="docutils literal"><span class="pre">down</span></code> with the <code class="docutils literal"><span class="pre">_</span></code> symbol like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">_UUU</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>In our example the device <code class="docutils literal"><span class="pre">/dev/sda</span></code> has failed.</p>
+<p>Information on which device has failed should also be provided.  The admin needs to know
+the serial number of the failed device so the correct drive can be identified and swapped out for a new one.</p>
+<p>Device <code class="docutils literal"><span class="pre">/dev/sda1</span></code> has failed so the admin should run:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#hdparm -i /dev/sda</span>
+</pre></div>
+</div>
+<p>Which will output the serial number and manufacture information of the drive.</p>
+<p>After the bad drive has been identified, it is time to mark it as a failed device:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#mdadm --manage /dev/md0 --fail /dev/sda1</span>
+<span class="c1">#mdadm --manage /dev/md0 --remove /dev/sda1</span>
+</pre></div>
+</div>
+<p>Next, safely shutdown the machine:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#shutdown -P now</span>
+</pre></div>
+</div>
+<p>Then replace the broken drive with a new drive.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The head node currently uses 2TB WD black drives.  Technically any 2TB hard disk will
+work but it is recommended to replace the failed drive with a similar make and model.</p>
+</div>
+<p>After powering the machine back on, the partition table from a functioning disk must be copied over
+to the new drive:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#sfdisk -d /dev/sdb | sfdisk /dev/sda</span>
+</pre></div>
+</div>
+<p>Now add the new device to the array:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#mdadm --manage /dev/md0 --add /dev/sda1</span>
+</pre></div>
+</div>
+<p>Check the array is being rebuilt:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#cat /proc/mdstat</span>
+</pre></div>
+</div>
+<p>Should output that the array is being rebuilt.  It could take a few hours to complete the process.  The cluster
+will be functional during this time with reduced IO performance.</p>
+</div>
+<div class="section" id="rebooting-a-compute-node">
+<h2>Rebooting a Compute Node<a class="headerlink" href="#rebooting-a-compute-node" title="Permalink to this headline">¶</a></h2>
+<p>Compute nodes may go down from time to time or need to be rebooted after a utility power failure.</p>
+<p>Though this should be pretty self evident... To reboot a compute node make sure the head node is powered on first.  Remember to
+to select <code class="docutils literal"><span class="pre">PXE</span> <span class="pre">Boot</span></code> (<code class="docutils literal"><span class="pre">&lt;F12&gt;</span></code>) in the BIOS of the compute node.</p>
+<p>For more boot options see the dell poweredge <a class="reference external" href="https://www.dell.com/support/home/us/en/04/product-support/product/poweredge-r815/manuals">r815</a> manual.</p>
+</div>
+</div>
+<div class="section" id="backup-backup-backup">
+<h1>Backup Backup Backup<a class="headerlink" href="#backup-backup-backup" title="Permalink to this headline">¶</a></h1>
+<p>User data (data residing in the <code class="docutils literal"><span class="pre">/home/srv/nukehome</span></code>) directory must be backed up!  No excuses.</p>
+<p>Data is backed up to a USB connected 1TB hard disk.  The backup disk is encrypted with LUKS (Linux Unified Key Setup) to prevent physical theft of data.
+To manually decrypt and mount the drive:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#cryptdisk_start nuke_backup</span>
+<span class="c1">#mount -a</span>
+</pre></div>
+</div>
+<p>Alternatively:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#cryptsetup luksOpen /dev/sde1 encrypted_home_backup</span>
+<span class="c1">#mount /dev/mapper/encrypted_home_backup /mnt/backup</span>
+</pre></div>
+</div>
+<p>The luksOpen command will prompt for a password.</p>
+<p>Normally, the encrypted device will be mounted to the head node on boot.  To accomplish automated mounting of an
+encrypted volume, the contents of <code class="docutils literal"><span class="pre">/etc/crypttab</span></code> are:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>nuke_backup /dev/disk/by-uuid/&lt;UUID_of_device&gt; /root/keyfile luks
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Notice the /root/keyfile entry.  Following sections cover how to generate a keyfile to automate
+mounting a LUKS encrypted volume.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If the backup device is ever changed ensure to 1) encrypt it with LUKS and 2) change the device name in
+/etc/crypttab</p>
+</div>
+<p>And the corresponding line in <code class="docutils literal"><span class="pre">/etc/fstab</span></code></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>/dev/mapper/nuke_backup /mnt/backup ext4 defaults 0 2
+</pre></div>
+</div>
+<div class="section" id="cron-job">
+<h2>Cron Job<a class="headerlink" href="#cron-job" title="Permalink to this headline">¶</a></h2>
+<p>A backup <a class="reference external" href="https://wiki.archlinux.org/index.php/Cron">cron</a> job has been added to the root&#8217;s <code class="docutils literal"><span class="pre">crontab</span></code>.  The admin can edit the crontab via:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#crontab -e</span>
+</pre></div>
+</div>
+<p>Setting up a weekly <code class="docutils literal"><span class="pre">/home/srv/nukehome</span></code> incremental backup job is simple.  It makes use of <a class="reference external" href="http://rsync.samba.org">rsync</a> .  The crontab entry
+looks like:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>0 0 * * 0 /root/nukecluster/bash/backupHome.sh
+</pre></div>
+</div>
+<p>The backup script (included in this repo) will only run if the USB backup device is plugged into the head node!</p>
+</div>
+<div class="section" id="encrypting-a-device">
+<h2>Encrypting a Device<a class="headerlink" href="#encrypting-a-device" title="Permalink to this headline">¶</a></h2>
+<p>LUKS encryption can be applied to a new backup device with:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#cryptsetup -y -v luksFormat /dev/&lt;device_name&gt;</span>
+</pre></div>
+</div>
+<p>Will prompt for a password.  Then run:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#cryptsetup luksOpen /dev/&lt;device_name&gt; new_device</span>
+<span class="c1">#mkfs.ext4 /dev/mapper/new_device</span>
+</pre></div>
+</div>
+<p>This will erase all data on the device.</p>
+</div>
+<div class="section" id="creating-a-root-keyfile">
+<h2>Creating a root keyfile<a class="headerlink" href="#creating-a-root-keyfile" title="Permalink to this headline">¶</a></h2>
+<p>A keyfile is necessary to automate the process of unlocking LUKS volumes on boot.</p>
+<p>Gen some random 4096 bit junk:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#dd if=/dev/urandom of=/root/keyfile bs=1024 count=4</span>
+</pre></div>
+</div>
+<p>Make it read only by root:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#chmod 0400 /root/keyfile</span>
+</pre></div>
+</div>
+<p>Add keyfile to LUKS volume:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#cryptsetup luksAddKey /dev/disk/by-uuid/&lt;UUID_of_device&gt; /root/keyfile</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Hardware Maintainance Guide</a><ul>
+<li><a class="reference internal" href="#head-node-hard-drive-replacement">Head Node Hard Drive Replacement</a></li>
+<li><a class="reference internal" href="#rebooting-a-compute-node">Rebooting a Compute Node</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#backup-backup-backup">Backup Backup Backup</a><ul>
+<li><a class="reference internal" href="#cron-job">Cron Job</a></li>
+<li><a class="reference internal" href="#encrypting-a-device">Encrypting a Device</a></li>
+<li><a class="reference internal" href="#creating-a-root-keyfile">Creating a root keyfile</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="software_setup.html"
+                        title="previous chapter">Base Software</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="storage_node.html"
+                        title="next chapter">Configure Storage Nodes</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/maintenance.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="storage_node.html" title="Configure Storage Nodes"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="software_setup.html" title="Base Software"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Nukestar 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2014, william gurecky.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+    </div>
+  </body>
+</html>

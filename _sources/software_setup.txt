@@ -19,7 +19,6 @@ In the chroot / compute node environment, the following software will be install
      - mcnp
      - python packages
      - njoy
-     - openmc
 
 Base OS software
 -----------------
@@ -47,6 +46,8 @@ Install scripts for Torque_ and Maui_ can be found in the ``/bash`` folder of th
 
 Execute the torque and maui install script on the head node (host OS)::
 
+    #cp /root/nukecluster/bash/setup/install_pbs-head.sh \
+    /setup/.
     #chmod +x install_pbs-head.sh
     #./install_pbs-head.sh
 
@@ -70,6 +71,9 @@ The hostlist fo Maui is stored in: .
 Chroot / Compute Node Software
 +++++++++++++++++++++++++++++++
 
+Environment Modules
+-------------------
+
 Install the environment-modules package in chroot::  
 
     #>apt-get install environment-modules
@@ -91,6 +95,10 @@ Install PBS_MOM in Compute OS
 create scratch directory in chroot::
 
     #mkdir /srv/nukeroot/setup
+    #cp /root/nukecluster/bash/setup/torque-package-mom-linux-x86_64.sh \
+    /srv/nukeroot/setup/.
+    #cp /root/nukecluster/bash/setup/install_pbs-node.sh \
+    /srv/nukeroot/setup/.
 
 chroot ::
 
@@ -98,14 +106,14 @@ chroot ::
 
 Install pbs_mom::
 
-    #cd /setup
-    #chmod +x install_pbs-node.sh
-    #./install_pbs-node.sh
+    #> cd /setup
+    #> chmod +x install_pbs-node.sh
+    #> ./install_pbs-node.sh
 
 Check to see if it works::
 
-    #which pbs_mom
-    #qnodes
+    #> which pbs_mom
+    #> qnodes
 
 ``qnodes`` should output the status of all nodes in the cluster.  See the users guide for how to submit jobs to the queue.
 
@@ -114,6 +122,10 @@ TORQUE / MAUI systemd scripts
 ++++++++++++++++++++++++++++++
 
 On the head node we must start the ``pbs_server``, ``maui``, and ``pbs_mom`` daemons.  On the compute nodes, only the ``pbs_mom`` service is required.  It is convinient to have these services automatically start on system boot up.  This can be achived by writing simple systemd startup scripts.
+
+
+Head Node
+---------
 
 Start by creating systemd scripts on the head node::
 
@@ -138,7 +150,9 @@ Fill ``/usr/bin/pbs`` with::
 
     start(){
     exec /usr/local/sbin/pbs_server
+    exec sleep 1
     exec /usr/local/maui/sbin/maui
+    exec sleep 1
     exec /usr/local/sbin/pbs_mom
     }
 
@@ -155,6 +169,9 @@ Fill ``/usr/bin/pbs`` with::
 Enable exec on boot with::
 
     #systemctl enable pbs.service
+
+Compute Nodes / chroot
+-----------------------
 
 In the chroot we must do the following::
 
