@@ -1,2 +1,4 @@
 *.pickle
 *.js
+*.doctree
+doc/build/
