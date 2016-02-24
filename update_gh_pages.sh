@@ -11,7 +11,7 @@
 # def repo vars
 REPONAME=nukecluster
 BASEDIR=/root
-SRCREPO=$BASEDIR/$REPONAME
+SRCREPO=`pwd`
 SRCDOCS=$SRCREPO/doc/build/html
 TMPREPO=/tmp/docs/$REPONAME
 MSG="gh-pages docs for `git log -1 --pretty=short --abbrev-commit`"
