@@ -1,8 +1,8 @@
 Configure Storage Nodes
 +++++++++++++++++++++++
 
-If seperate storage are desired; configuring cluster storage precedes configuing the head node or the 
-compute nodes.  This storage node configuratin guide assumes that the storage nodes already have a
+If separate storage are desired; configuring cluster storage precedes configuring the head node or the 
+compute nodes.  This storage node configuration guide assumes that the storage nodes already have a
 clean Debian installation on them.
 
 Here we will assume we have 4 storage nodes and each node has 1 drive dedicated to the OS install and 2 drives available for both a

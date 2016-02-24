@@ -10,16 +10,17 @@ apparent that this new resource would need to be managed differently than the cu
 cluster available to NRE students.  Briefly, the old (2009-2014) Nukestar cluster consisted of
 6 machines totaling 214 cores.  These machines were essentially carbon copies of each other,
 with every node on the cluster having the same software installed.  This configuration did
-not scale. It is difficult to ensure all nodes always stay in perfect sync with regaurds to permissions and
+not scale. It is difficult to ensure all nodes always stay in perfect sync with regards to permissions and
 software packages.  In addition, there were many points of failure: each machine had a change of
-going down due to a bad hard drive.  To achive a scalibility a new stateless node management scheme has been
+going down due to a bad hard drive.  To achieve a scalability a new stateless node management scheme has been
 implemented and tested.
 
-In the new stateless compute node cluster management paradime, the compute nodes must retrieve their OS image via
-remote source to function.  This is known as PXE or diskless booting.  The compute nodes do not need to have a hardrive inside them - instead
-the compute nodes need access to a network storage pool.  The key benifit from this stateless comptue node arangement is that, to the user,
+In the new stateless compute node cluster management paradigm, the compute nodes retrieve their OS image via a
+remote source to function.  This is known as PXE or diskless booting.  The compute nodes do not need to have a hard drive inside them - instead
+the compute nodes need access to a network storage pool.  The key benefit from this stateless compute node arrangement is that, to the user,
 the entire cluster looks like one machine: Software only needs to be installed once. Group, user, and
-permission changes are automatically propogated to all machines in the cluster.
+permission changes are automatically propagated to all machines in the cluster.  In addition, fewer computers with hard
+disks means less points of failure.
 
 .. Note::
 	A traditional single node Netword File System (NFS) share is not likely to handle the simultaneous demand of 48 different
@@ -40,9 +41,10 @@ permission changes are automatically propogated to all machines in the cluster.
 	is desired at some point in the future, Appendinx A provides some basic pointers on setting up the storage pool.
 	Diskless compute nodes will still utilize PXE booting.
 
-The physical layout of the Nukestar cluster is shown below.  The Router doubles as a firewall.  Only
-3 compute nodes are shown, however, many more may exist (5 as of fall 2015).  Another benifit of the
-stateless compute node setup is that a new compute node can be added to the cluster by connecting it to the
+The physical layout of the Nukestar cluster is shown below.  The Router doubles as a firewall (not shown is a network
+switch that is connected to the LAN side of the router/firewall).  Only
+3 compute nodes are shown, however, many more may exist.  Another benefit of the
+stateless compute node setup is that a new compute node can be easily added to the cluster by connecting it to the
 switch, assigning it a static IP, enabling PXE boot up in the bios, and powering it on.  
 
 .. image:: images/nukestar.png
