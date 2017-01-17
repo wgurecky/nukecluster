@@ -65,11 +65,11 @@ backups.</p>
 the <cite>base</cite> OS not in the chroot before proceeding.</p>
 </div>
 <p>To check the health of the raid array execute:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#cat /proc/mdstat</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#cat /proc/mdstat</span>
 </pre></div>
 </div>
 <p>You will see an output similar to:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>Personalities : [raid10]
+<div class="highlight-python"><div class="highlight"><pre>Personalities : [raid10]
 md0 : active raid10 sda1[0] sdb1[1] sdc1[2] sdd1[3]
 3906765800 blocks super 1.2 512K chunks 2 near-copies [4/4][UUUU]
 unused devices: &lt;none&gt;
@@ -77,24 +77,24 @@ unused devices: &lt;none&gt;
 </div>
 <p>If anything is wrong with a drive
 it will be marked <code class="docutils literal"><span class="pre">failed</span></code> or <code class="docutils literal"><span class="pre">down</span></code> with the <code class="docutils literal"><span class="pre">_</span></code> symbol like this:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">_UUU</span><span class="p">]</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="n">_UUU</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>In our example the device <code class="docutils literal"><span class="pre">/dev/sda</span></code> has failed.</p>
 <p>Information on which device has failed should also be provided.  The admin needs to know
 the serial number of the failed device so the correct drive can be identified and swapped out for a new one.</p>
 <p>Device <code class="docutils literal"><span class="pre">/dev/sda1</span></code> has failed so the admin should run:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#hdparm -i /dev/sda</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#hdparm -i /dev/sda</span>
 </pre></div>
 </div>
 <p>Which will output the serial number and manufacture information of the drive.</p>
 <p>After the bad drive has been identified, it is time to mark it as a failed device:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#mdadm --manage /dev/md0 --fail /dev/sda1</span>
-<span class="c1">#mdadm --manage /dev/md0 --remove /dev/sda1</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#mdadm --manage /dev/md0 --fail /dev/sda1</span>
+<span class="c">#mdadm --manage /dev/md0 --remove /dev/sda1</span>
 </pre></div>
 </div>
 <p>Next, safely shutdown the machine:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#shutdown -P now</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#shutdown -P now</span>
 </pre></div>
 </div>
 <p>Then replace the broken drive with a new drive.</p>
@@ -105,15 +105,15 @@ work but it is recommended to replace the failed drive with a similar make and m
 </div>
 <p>After powering the machine back on, the partition table from a functioning disk must be copied over
 to the new drive:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#sfdisk -d /dev/sdb | sfdisk /dev/sda</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#sfdisk -d /dev/sdb | sfdisk /dev/sda</span>
 </pre></div>
 </div>
 <p>Now add the new device to the array:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#mdadm --manage /dev/md0 --add /dev/sda1</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#mdadm --manage /dev/md0 --add /dev/sda1</span>
 </pre></div>
 </div>
 <p>Check the array is being rebuilt:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#cat /proc/mdstat</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#cat /proc/mdstat</span>
 </pre></div>
 </div>
 <p>Should output that the array is being rebuilt.  It could take a few hours to complete the process.  The cluster
@@ -132,19 +132,19 @@ to select <code class="docutils literal"><span class="pre">PXE</span> <span clas
 <p>User data (data residing in the <code class="docutils literal"><span class="pre">/home/srv/nukehome</span></code>) directory must be backed up!  No excuses.</p>
 <p>Data is backed up to a USB connected 1TB hard disk.  The backup disk is encrypted with LUKS (Linux Unified Key Setup) to prevent physical theft of data.
 To manually decrypt and mount the drive:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#cryptdisk_start nuke_backup</span>
-<span class="c1">#mount -a</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#cryptdisk_start nuke_backup</span>
+<span class="c">#mount -a</span>
 </pre></div>
 </div>
 <p>Alternatively:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#cryptsetup luksOpen /dev/sde1 encrypted_home_backup</span>
-<span class="c1">#mount /dev/mapper/encrypted_home_backup /mnt/backup</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#cryptsetup luksOpen /dev/sde1 encrypted_home_backup</span>
+<span class="c">#mount /dev/mapper/encrypted_home_backup /mnt/backup</span>
 </pre></div>
 </div>
 <p>The luksOpen command will prompt for a password.</p>
 <p>Normally, the encrypted device will be mounted to the head node on boot.  To accomplish automated mounting of an
 encrypted volume, the contents of <code class="docutils literal"><span class="pre">/etc/crypttab</span></code> are:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>nuke_backup /dev/disk/by-uuid/&lt;UUID_of_device&gt; /root/keyfile luks
+<div class="highlight-python"><div class="highlight"><pre>nuke_backup /dev/disk/by-uuid/&lt;UUID_of_device&gt; /root/keyfile luks
 </pre></div>
 </div>
 <div class="admonition note">
@@ -158,18 +158,18 @@ mounting a LUKS encrypted volume.</p>
 /etc/crypttab</p>
 </div>
 <p>And the corresponding line in <code class="docutils literal"><span class="pre">/etc/fstab</span></code></p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>/dev/mapper/nuke_backup /mnt/backup ext4 defaults 0 2
+<div class="highlight-python"><div class="highlight"><pre>/dev/mapper/nuke_backup /mnt/backup ext4 defaults 0 2
 </pre></div>
 </div>
 <div class="section" id="cron-job">
 <h2>Cron Job<a class="headerlink" href="#cron-job" title="Permalink to this headline">¶</a></h2>
 <p>A backup <a class="reference external" href="https://wiki.archlinux.org/index.php/Cron">cron</a> job has been added to the root&#8217;s <code class="docutils literal"><span class="pre">crontab</span></code>.  The admin can edit the crontab via:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#crontab -e</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#crontab -e</span>
 </pre></div>
 </div>
 <p>Setting up a weekly <code class="docutils literal"><span class="pre">/home/srv/nukehome</span></code> incremental backup job is simple.  It makes use of <a class="reference external" href="http://rsync.samba.org">rsync</a> .  The crontab entry
 looks like:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>0 0 * * 0 /root/nukecluster/bash/backupHome.sh
+<div class="highlight-python"><div class="highlight"><pre>0 0 * * 0 /root/nukecluster/bash/backupHome.sh
 </pre></div>
 </div>
 <p>The backup script (included in this repo) will only run if the USB backup device is plugged into the head node!</p>
@@ -177,12 +177,12 @@ looks like:</p>
 <div class="section" id="encrypting-a-device">
 <h2>Encrypting a Device<a class="headerlink" href="#encrypting-a-device" title="Permalink to this headline">¶</a></h2>
 <p>LUKS encryption can be applied to a new backup device with:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#cryptsetup -y -v luksFormat /dev/&lt;device_name&gt;</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#cryptsetup -y -v luksFormat /dev/&lt;device_name&gt;</span>
 </pre></div>
 </div>
 <p>Will prompt for a password.  Then run:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#cryptsetup luksOpen /dev/&lt;device_name&gt; new_device</span>
-<span class="c1">#mkfs.ext4 /dev/mapper/new_device</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#cryptsetup luksOpen /dev/&lt;device_name&gt; new_device</span>
+<span class="c">#mkfs.ext4 /dev/mapper/new_device</span>
 </pre></div>
 </div>
 <p>This will erase all data on the device.</p>
@@ -191,15 +191,15 @@ looks like:</p>
 <h2>Creating a root keyfile<a class="headerlink" href="#creating-a-root-keyfile" title="Permalink to this headline">¶</a></h2>
 <p>A keyfile is necessary to automate the process of unlocking LUKS volumes on boot.</p>
 <p>Gen some random 4096 bit junk:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#dd if=/dev/urandom of=/root/keyfile bs=1024 count=4</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#dd if=/dev/urandom of=/root/keyfile bs=1024 count=4</span>
 </pre></div>
 </div>
 <p>Make it read only by root:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#chmod 0400 /root/keyfile</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#chmod 0400 /root/keyfile</span>
 </pre></div>
 </div>
 <p>Add keyfile to LUKS volume:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#cryptsetup luksAddKey /dev/disk/by-uuid/&lt;UUID_of_device&gt; /root/keyfile</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#cryptsetup luksAddKey /dev/disk/by-uuid/&lt;UUID_of_device&gt; /root/keyfile</span>
 </pre></div>
 </div>
 </div>
@@ -273,7 +273,7 @@ looks like:</p>
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2014, william gurecky.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>

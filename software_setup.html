@@ -63,10 +63,6 @@ which is effectively the global &#8220;compute node&#8221; OS.</p>
 </li>
 <li><p class="first">Maui</p>
 </li>
-<li><p class="first">gcc compilers</p>
-</li>
-<li><p class="first">openmpi</p>
-</li>
 <li><p class="first">environment-modules</p>
 </li>
 <li><dl class="first docutils">
@@ -83,82 +79,92 @@ which is effectively the global &#8220;compute node&#8221; OS.</p>
 <div class="section" id="base-os-software">
 <h2>Base OS software<a class="headerlink" href="#base-os-software" title="Permalink to this headline">¶</a></h2>
 <p>On the host OS, create a scratch setup/build folder somwhere:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#mkdir /setup</span>
-<span class="c1">#cd /setup</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#mkdir /setup</span>
+<span class="c">#cd /setup</span>
 </pre></div>
 </div>
 <p>Copy the build scripts from the <code class="docutils literal"><span class="pre">/bash</span></code> folder of this repo into the <code class="docutils literal"><span class="pre">/setup</span></code> folder.</p>
 </div>
 <div class="section" id="torque-maui">
 <h2>Torque + Maui<a class="headerlink" href="#torque-maui" title="Permalink to this headline">¶</a></h2>
-<p>Before the scripts can be executed, the source tarbal for both Torque and Maui must be procured from the adaptivecomputing.com website.:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#cd /setup</span>
-<span class="c1">#wget http://wpfilebase.s3.amazonaws.com/torque/torque-2.5.12.tar.gz</span>
-<span class="c1">#wget http://wpfilebase.s3.amazonaws.com/mauischeduler/maui-3.3.tar.gz</span>
+<p>Before the scripts can be executed, the source tarball for both Torque and Maui must be procured from the adaptivecomputing.com website.:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#cd /setup</span>
+<span class="c">#wget http://wpfilebase.s3.amazonaws.com/torque/torque-6.1.0.tar.gz</span>
+<span class="c">#wget http://wpfilebase.s3.amazonaws.com/mauischeduler/maui-3.3.1.tar.gz</span>
 </pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In order to download the Maui software package, you must first create an account
+on the adaptivecomputing.com website.</p>
 </div>
 <p>Install scripts for <a class="reference external" href="http://www.adaptivecomputing.com/products/open-source/torque-resource-manager/">Torque</a> and <a class="reference external" href="http://www.adaptivecomputing.com/products/open-source/maui/">Maui</a> can be found in the <code class="docutils literal"><span class="pre">/bash</span></code> folder of this repo.</p>
 <p>Execute the torque and maui install script on the head node (host OS):</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>#cp /root/nukecluster/bash/setup/install_pbs-head.sh \
+<div class="highlight-python"><div class="highlight"><pre>#cp /root/nukecluster/bash/setup/install_pbs-head.sh \
 /setup/.
 #chmod +x install_pbs-head.sh
 #./install_pbs-head.sh
 </pre></div>
 </div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">WARNING: The install_pbs-head.sh convinience script may need to be adjusted slightly.
+This script just installs the dependencies and
+executes the commands required to install Torque and Maui on the head node.</p>
 </div>
-<div class="section" id="configure-torque">
-<h2>Configure Torque<a class="headerlink" href="#configure-torque" title="Permalink to this headline">¶</a></h2>
-<p>PBS Queue settings are located in:</p>
-<p>PBS queueconfig documentation may be found here.</p>
+<p>For Torque/Maui install troubleshooting see: <a class="reference external" href="http://docs.adaptivecomputing.com/torque/6-1-0/adminGuide/help.htm">Torque_install</a> .</p>
 </div>
-<div class="section" id="configure-maui">
-<h2>Configure Maui<a class="headerlink" href="#configure-maui" title="Permalink to this headline">¶</a></h2>
-<p>Maui server settings are stored in <code class="docutils literal"><span class="pre">/var/spool/maui.cfg</span></code>.  Documentation for this file may be found: .</p>
-<p>The hostlist fo Maui is stored in: .</p>
+<div class="section" id="configure-torque-maui">
+<h2>Configure Torque/Maui<a class="headerlink" href="#configure-torque-maui" title="Permalink to this headline">¶</a></h2>
+<p>Queue settings are located in: <code class="docutils literal"><span class="pre">/var/spool/pbs/server_priv/queues/.</span></code> by default.
+The queue settings can be updated by modifying the <code class="docutils literal"><span class="pre">qconfig</span></code> file and
+running the <code class="docutils literal"><span class="pre">updatequeue.sh</span></code> script included in this nukestar maintenence package.</p>
+<p>PBS queueconfig documentation may be found here: <a class="reference external" href="http://docs.adaptivecomputing.com/torque/4-0-2/Content/topics/4-serverPolicies/queueConfig.htm">Qconfig</a>.</p>
+<p>Maui settings are stored in <code class="docutils literal"><span class="pre">/var/spool/maui/maui.cfg</span></code>.  Documentation for this file may be found: <a class="reference external" href="http://docs.adaptivecomputing.com/maui/index.php">Maui_docs</a>.</p>
+<p>The hostlist fo Toruqe/Maui is stored in: <code class="docutils literal"><span class="pre">/var/spool/pbs/server_priv/nodes</span></code> by default.  This file
+must be modified to add new compute nodes to the cluster.</p>
 </div>
 </div>
 <div class="section" id="chroot-compute-node-software">
 <h1>Chroot / Compute Node Software<a class="headerlink" href="#chroot-compute-node-software" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="environment-modules">
-<h2>Environment Modules<a class="headerlink" href="#environment-modules" title="Permalink to this headline">¶</a></h2>
-<p>Install the environment-modules package in chroot:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#&gt;apt-get install environment-modules</span>
+<p>The <code class="docutils literal"><span class="pre">PBS_MOM</span></code> daemon provided by Torque must be installed on the compute nodes so that the <code class="docutils literal"><span class="pre">pbs_server</span></code>
+and Maui scheduler can communicate with and schedule jobs on the compute nodes.</p>
+<div class="section" id="install-pbs-mom-in-chroot-compute-nodes">
+<h2>Install PBS_MOM in Chroot / Compute Nodes<a class="headerlink" href="#install-pbs-mom-in-chroot-compute-nodes" title="Permalink to this headline">¶</a></h2>
+<p>The Torque install process on the head node will create
+two important shell scripts (which are acutally binary blobs!).
+Check that the following files exist:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#cat /setup/torque-6.1.0/torque-package-clients-linux-x86_64.sh</span>
+<span class="c">#cat /setup/torque-6.1.0/torque-package-mom-linux-x86_64.sh</span>
 </pre></div>
 </div>
-<p>Then update the contents of <code class="docutils literal"><span class="pre">#&gt;/etc/bash.bashrc</span></code></p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>case &quot;$0&quot; in
-          -sh|sh|*/sh)  modules_shell=sh ;;
-       -ksh|ksh|*/ksh)  modules_shell=ksh ;;
-       -zsh|zsh|*/zsh)  modules_shell=zsh ;;
-    -bash|bash|*/bash)  modules_shell=bash ;;
-esac
-module() { eval `/usr/bin/modulecmd $modules_shell $*`; }
+<p>Create a scratch directory in chroot:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#mkdir /srv/nukeroot/setup</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="install-pbs-mom-in-compute-os">
-<h2>Install PBS_MOM in Compute OS<a class="headerlink" href="#install-pbs-mom-in-compute-os" title="Permalink to this headline">¶</a></h2>
-<p>create scratch directory in chroot:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>#mkdir /srv/nukeroot/setup
-#cp /root/nukecluster/bash/setup/torque-package-mom-linux-x86_64.sh \
-/srv/nukeroot/setup/.
-#cp /root/nukecluster/bash/setup/install_pbs-node.sh \
-/srv/nukeroot/setup/.
+<p>Copy the binary blob/torque shell scripts to the Chroot:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#cp /setup/torque-6.1.0/torque-package-clients-linux-x86_64.sh /srv/nukeroot/setup/.</span>
+<span class="c">#cp /setup/torque-6.1.0/torque-package-mom-linux-x86_64.sh /srv/nukeroot/setup/.</span>
 </pre></div>
 </div>
-<p>chroot</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#chroot /srv/nukeroot</span>
+<p>Chroot</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#chroot /srv/nukeroot</span>
 </pre></div>
 </div>
-<p>Install pbs_mom:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#&gt; cd /setup</span>
-<span class="c1">#&gt; chmod +x install_pbs-node.sh</span>
-<span class="c1">#&gt; ./install_pbs-node.sh</span>
+<p>Install <code class="docutils literal"><span class="pre">pbs_mom</span></code> and <code class="docutils literal"><span class="pre">trqauthd</span></code>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#&gt; cd /setup</span>
+<span class="c">#&gt; chmod +x torque-package-mom-linux-x86_64.sh</span>
+<span class="c">#&gt; chmod +x torque-package-clients-linux-x86_64.sh</span>
+<span class="c">#&gt; ./torque-package-mom-linux-x86_64.sh --install</span>
+<span class="c">#&gt; ./torque-package-clients-linux-x86_64.sh --install</span>
+</pre></div>
+</div>
+<p>Startup trqauthd in the chroot:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#&gt;trqauthd</span>
 </pre></div>
 </div>
 <p>Check to see if it works:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#&gt; which pbs_mom</span>
-<span class="c1">#&gt; qnodes</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#&gt; qnodes</span>
 </pre></div>
 </div>
 <p><code class="docutils literal"><span class="pre">qnodes</span></code> should output the status of all nodes in the cluster.  See the users guide for how to submit jobs to the queue.</p>
@@ -166,90 +172,95 @@ module() { eval `/usr/bin/modulecmd $modules_shell $*`; }
 </div>
 <div class="section" id="torque-maui-systemd-scripts">
 <h1>TORQUE / MAUI systemd scripts<a class="headerlink" href="#torque-maui-systemd-scripts" title="Permalink to this headline">¶</a></h1>
-<p>On the head node we must start the <code class="docutils literal"><span class="pre">pbs_server</span></code>, <code class="docutils literal"><span class="pre">maui</span></code>, and <code class="docutils literal"><span class="pre">pbs_mom</span></code> daemons.  On the compute nodes, only the <code class="docutils literal"><span class="pre">pbs_mom</span></code> service is required.  It is convinient to have these services automatically start on system boot up.  This can be achived by writing simple systemd startup scripts.</p>
+<p>On the head node we must start the <code class="docutils literal"><span class="pre">pbs_server</span></code>, <code class="docutils literal"><span class="pre">maui</span></code>, and <code class="docutils literal"><span class="pre">pbs_mom</span></code> daemons.  On the compute nodes,
+only the <code class="docutils literal"><span class="pre">pbs_mom</span></code> service is required.  It is convinient to have these services automatically start on system boot up.
+This can be achived by enabling the systemd startup scripts included with the Torque package.</p>
 <div class="section" id="head-node">
 <h2>Head Node<a class="headerlink" href="#head-node" title="Permalink to this headline">¶</a></h2>
-<p>Start by creating systemd scripts on the head node:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#touch /etc/systemd/system/pbs.service</span>
-<span class="c1">#touch /usr/bin/pbs</span>
+<p>After a sucessful make and install of the Torque and Maui packages
+navigate to <code class="docutils literal"><span class="pre">#/usr/lib/systemd/system/.</span></code>.</p>
+<p>Check for the files <code class="docutils literal"><span class="pre">pbs_server.service</span></code>, <code class="docutils literal"><span class="pre">trqauthd.service</span></code> in this directory</p>
+<p>Create the Maui systemd script:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#touch /usr/lib/systemd/system/maui.service</span>
 </pre></div>
 </div>
-<p>Fill <code class="docutils literal"><span class="pre">/etc/systemd/system/pbs.service</span></code> with the following:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>[Unit]
-Description=Start pbs on head node
+<p>Fill <code class="docutils literal"><span class="pre">/usr/lib/systemd/system/maui.service</span></code> with the following:</p>
+<div class="highlight-python"><div class="highlight"><pre>[Unit]
+Description=MAUI scheduler
+Requires=network.target local-fs.target
+Wants=rsyslog.target
+After=trqauthd.service pbs_server.service network.target local-fs.target rsyslog.target
 
 [Service]
-Type=oneshot
-ExecStart=/usr/bin/pbs start
-ExecStop=/usr/bin/pbs stop
-RemainAfterExit=yes
+Type=forking
+User=root
+
+# Let systemd guess the pid.
+GuessMainPID=yes
+
+# Start command
+ExecStart=/usr/local/maui/sbin/maui
 
 [Install]
 WantedBy=multi-user.target
 </pre></div>
 </div>
-<p>Fill <code class="docutils literal"><span class="pre">/usr/bin/pbs</span></code> with:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>start(){
-exec /usr/local/sbin/pbs_server
-exec sleep 1
-exec /usr/local/maui/sbin/maui
-exec sleep 1
-exec /usr/local/sbin/pbs_mom
-}
-
-stop(){
-killall pbs_mom
-killall maui
-killall pbs_server
-}
-
-case $1 in
-  start|stop) &quot;$1&quot; ;;
-esac
+<p>Enable Torque/Maui on boot with:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#cd /usr/lib/systemd/system</span>
+<span class="c">#systemctl enable trqauthd.service</span>
+<span class="c">#systemctl enable pbs_server.service</span>
+<span class="c">#systemctl enable maui.service</span>
 </pre></div>
 </div>
-<p>Enable exec on boot with:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#systemctl enable pbs.service</span>
+<p>Bring up Torque/Maui</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#service trqauthd start</span>
+<span class="c">#service pbs_server start</span>
+<span class="c">#service maui start</span>
+</pre></div>
+</div>
+<p>Check the status of each service</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#systemctl status trqauthd.service</span>
+<span class="c">#systemctl status pbs_server.service</span>
+<span class="c">#systemctl status maui.service</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="compute-nodes-chroot">
 <h2>Compute Nodes / chroot<a class="headerlink" href="#compute-nodes-chroot" title="Permalink to this headline">¶</a></h2>
-<p>In the chroot we must do the following:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#&gt;touch /etc/systemd/system/pbs.service</span>
-<span class="c1">#&gt;touch /usr/bin/pbs</span>
+<p>After the <code class="docutils literal"><span class="pre">torque-package-clients-linux-x86_64.sh</span></code> and.
+<code class="docutils literal"><span class="pre">torque-package-mom-linux-x86_64.sh</span></code> scripts have been executed in the chroot environment
+check that <code class="docutils literal"><span class="pre">/usr/lib/systemd/system/pbs_mom.service</span></code> exists in the chroot:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#&gt;cat /usr/lib/systemd/system/pbs_mom.service</span>
 </pre></div>
 </div>
-<p>Fill <code class="docutils literal"><span class="pre">$&gt;/etc/systemd/system/pbs.service</span></code> with the following:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>[Unit]
-Description=Start pbs monitor on compute node
-
-[Service]
-Type=oneshot
-ExecStart=/usr/bin/pbs start
-ExecStop=/usr/bin/pbs stop
-RemainAfterExit=yes
-
-[Install]
-WantedBy=multi-user.target
+<p>check that <code class="docutils literal"><span class="pre">/usr/lib/systemd/system/trqauthd.service</span></code> exists in the chroot:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#&gt;cat /usr/lib/systemd/system/trqauthd.service</span>
 </pre></div>
 </div>
-<p>Fill <code class="docutils literal"><span class="pre">$&gt;/usr/bin/pbs</span></code> with:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>start(){
-exec /usr/local/sbin/pbs_mom
-}
-
-stop(){
-killall pbs_mom
-}
-
-case $1 in
-  start|stop) &quot;$1&quot; ;;
+<p>If this file was not created after executing <code class="docutils literal"><span class="pre">torque-package-mom-linux-x86_64.sh</span></code> something
+went wrong with the Torque install.</p>
+<p>Enable PBS_MOM daemon to start on compute node boot with:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#&gt;cd /usr/lib/systemd/system</span>
+<span class="c">#&gt;systemctl enable trqauthd.service</span>
+<span class="c">#&gt;systemctl enable pbs_mom.service</span>
+</pre></div>
+</div>
+<p>This concludes basic Torque/Maui setup.</p>
+</div>
+<div class="section" id="environment-modules">
+<h2>Environment Modules<a class="headerlink" href="#environment-modules" title="Permalink to this headline">¶</a></h2>
+<p>Install the environment-modules package in chroot:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#&gt;apt-get install environment-modules</span>
+</pre></div>
+</div>
+<p>Then update the contents of <code class="docutils literal"><span class="pre">#&gt;/etc/bash.bashrc</span></code></p>
+<div class="highlight-python"><div class="highlight"><pre>case &quot;$0&quot; in
+          -sh|sh|*/sh)  modules_shell=sh ;;
+       -ksh|ksh|*/ksh)  modules_shell=ksh ;;
+       -zsh|zsh|*/zsh)  modules_shell=zsh ;;
+    -bash|bash|*/bash)  modules_shell=bash ;;
 esac
-</pre></div>
-</div>
-<p>Enable exec on boot with:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1">#&gt;systemctl enable pbs.service</span>
+module() { eval `/usr/bin/modulecmd $modules_shell $*`; }
 </pre></div>
 </div>
 </div>
@@ -266,18 +277,17 @@ esac
 <li><a class="reference internal" href="#">Base Software</a><ul>
 <li><a class="reference internal" href="#base-os-software">Base OS software</a></li>
 <li><a class="reference internal" href="#torque-maui">Torque + Maui</a></li>
-<li><a class="reference internal" href="#configure-torque">Configure Torque</a></li>
-<li><a class="reference internal" href="#configure-maui">Configure Maui</a></li>
+<li><a class="reference internal" href="#configure-torque-maui">Configure Torque/Maui</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#chroot-compute-node-software">Chroot / Compute Node Software</a><ul>
-<li><a class="reference internal" href="#environment-modules">Environment Modules</a></li>
-<li><a class="reference internal" href="#install-pbs-mom-in-compute-os">Install PBS_MOM in Compute OS</a></li>
+<li><a class="reference internal" href="#install-pbs-mom-in-chroot-compute-nodes">Install PBS_MOM in Chroot / Compute Nodes</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#torque-maui-systemd-scripts">TORQUE / MAUI systemd scripts</a><ul>
 <li><a class="reference internal" href="#head-node">Head Node</a></li>
 <li><a class="reference internal" href="#compute-nodes-chroot">Compute Nodes / chroot</a></li>
+<li><a class="reference internal" href="#environment-modules">Environment Modules</a></li>
 </ul>
 </li>
 </ul>
@@ -329,7 +339,7 @@ esac
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2014, william gurecky.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>
