@@ -259,19 +259,16 @@ The following PBS script submits an job to cluster utilizing 24 cores on node nu
        - nukestar06:  64
     If you request more cores than a node has you job will hang in the queue indefinately.
 
-To execute an MCNP job on 120 cores, for example, use the following PBS settings block::
+To execute an MCNP job on 128 cores, for example, use the following PBS settings block::
 
     #!/bin/bash
     ### PBS Settings
     #PBS -S /bin/bash
     #PBS -N test_case
-    #PBS -l nodes=120
+    #PBS -l nodes=2:ppn=64
     #PBS -q day
     #PBS -j oe
     #PBS -V
-
-Though the ``nodes=120`` syntax may be misleading, this will execute a job on 120 cores on any
-avalible cores in the cluster.  
 
 .. Note::
 
