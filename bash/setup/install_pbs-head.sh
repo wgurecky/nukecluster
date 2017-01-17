@@ -1,9 +1,17 @@
 #!/bin/bash
+# About
+# ======
+# Torque/Maui install script for Debain/Ubuntu
+# Assumes torque and maui tar archives reside in the
+# /setup directory
 
-TVERSION=2.5.12
-MVERSION=3.3
+TVERSION=6.1.0
+MVERSION=3.3.1
 DEFAULTSERVER=nukestar01
-REQ_PACKAGES="autotools-dev libltdl-dev libltdl7 libtool"
+# Ubuntu
+# REQ_PACKAGES="autotools-dev libltdl-dev libltdl7 libtool"
+# Debain
+REQ_PACKAGES="libssl-dev libtool-bin libmcrypt-dev autotools-dev libltdl-dev libltdl7 libtool"
 
 cd /setup
 
